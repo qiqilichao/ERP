@@ -14,8 +14,8 @@ public class Menu {
     @TableId(value = "ID",type = IdType.AUTO)
     private int id;
 
-    @TableField("PARENT_ID")
-    private int parent_id;
+//    @TableField("PARENT_ID")
+    private int parentId;
 
     @TableField("SEQ")
     private int seq;
@@ -29,11 +29,11 @@ public class Menu {
     @TableField("DESCN")
     private String descn;
 
-    @TableField("IMAGE_URL")
-    private String image_url;
+//    @TableField("IMAGE_URL")
+    private String imageUrl;
 
-    @TableField("LINK_URL")
-    private String link_url;
+//    @TableField("LINK_URL")
+    private String linkUrl;
 
     @TableField("TARGET")
     private String target;
