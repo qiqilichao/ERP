@@ -8,15 +8,19 @@ import com.guigu.mapper.GatherMapper;
 import com.guigu.pojo.Gather;
 import com.guigu.service.GatherService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 public class GatherServiceImpl extends ServiceImpl<GatherMapper, Gather> implements GatherService {
 
     @Override
-    public IPage<Gather> Storagesboundscheduling(Integer pageno, Integer pagesize) {
+    public IPage<Gather> Storagesboundscheduling(Integer id,Integer pageno, Integer pagesize) {
         QueryWrapper<Gather> wrapper = new QueryWrapper<Gather>();
         wrapper.eq("checkTag","S001-1");
         wrapper.eq("gatherTag","K002-1");
+        if (!StringUtils.isEmpty(id)){
+            wrapper.eq("id",id);
+        }
         return this.page(new Page<Gather>(pageno,pagesize),wrapper);
     }
 }

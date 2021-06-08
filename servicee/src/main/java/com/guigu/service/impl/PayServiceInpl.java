@@ -8,14 +8,18 @@ import com.guigu.mapper.PayMapper;
 import com.guigu.pojo.Pay;
 import com.guigu.service.PayService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 public class PayServiceInpl extends ServiceImpl<PayMapper, Pay> implements PayService {
     @Override
-    public IPage<Pay> Outboundscheduling(Integer pageno, Integer pagesize) {
+    public IPage<Pay> Outboundscheduling(Integer id,Integer pageno, Integer pagesize) {
         QueryWrapper<Pay> wrapper = new QueryWrapper<Pay>();
         wrapper.eq("checkTag","S001-1");
         wrapper.eq("payTag","K002-1");
+        if (!StringUtils.isEmpty(id)){
+            wrapper.eq("id",id);
+        }
         return this.page(new Page<Pay>(pageno,pagesize),wrapper);
     }
 }

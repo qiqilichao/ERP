@@ -7,5 +7,5 @@ import com.guigu.pojo.Pay;
 
 public interface GatherService extends IService<Gather> {
     //查询出审核通过且未作调度的入库单
-    IPage<Gather> Storagesboundscheduling(Integer pageno, Integer pagesize);
+    IPage<Gather> Storagesboundscheduling(Integer id,Integer pageno, Integer pagesize);
 }
