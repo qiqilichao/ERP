@@ -1,10 +1,12 @@
 package com.guigu.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import net.sf.jsqlparser.expression.DateTimeLiteralExpression;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -12,6 +14,10 @@ import java.util.Date;
 @Data
 @TableName("d_file")
 public class Dfile {
+
+    @TableField(exist = false)
+    private boolean checked;
+
     @TableId(type = IdType.AUTO)
     private Integer id;
 
@@ -63,5 +69,19 @@ public class Dfile {
     private String designModuleTag;
     private String designProcedureTag;
     private String designCellTag;
+
+    @TableField(exist = false)
+    private int num;
+
+
+    @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
+    @TableField(exist = false)
+    private Date registerTime2;
+
+    @TableField(exist = false)
+    private String register2;
+    @TableField(exist = false)
+    private String remark;
+
 
 }
