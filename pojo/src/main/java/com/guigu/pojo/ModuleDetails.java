@@ -1,8 +1,16 @@
 package com.guigu.pojo;
 
-import java.math.BigDecimal;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 
-public class ModuleDetails {
+
+
+@Data
+@TableName("d_module_details")
+public class ModuleDetails extends Module {
+    @TableId(type = IdType.AUTO)
     private Integer id;
 
     private Integer parentId;
@@ -23,103 +31,7 @@ public class ModuleDetails {
 
     private Integer residualAmount;
 
-    private BigDecimal costPrice;
+    private float costPrice;
 
-    private BigDecimal subtotal;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
-    }
-
-    public Integer getDetailsNumber() {
-        return detailsNumber;
-    }
-
-    public void setDetailsNumber(Integer detailsNumber) {
-        this.detailsNumber = detailsNumber;
-    }
-
-    public String getProductId() {
-        return productId;
-    }
-
-    public void setProductId(String productId) {
-        this.productId = productId == null ? null : productId.trim();
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName == null ? null : productName.trim();
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type == null ? null : type.trim();
-    }
-
-    public String getProductDescribe() {
-        return productDescribe;
-    }
-
-    public void setProductDescribe(String productDescribe) {
-        this.productDescribe = productDescribe == null ? null : productDescribe.trim();
-    }
-
-    public String getAmountUnit() {
-        return amountUnit;
-    }
-
-    public void setAmountUnit(String amountUnit) {
-        this.amountUnit = amountUnit == null ? null : amountUnit.trim();
-    }
-
-    public Integer getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Integer amount) {
-        this.amount = amount;
-    }
-
-    public Integer getResidualAmount() {
-        return residualAmount;
-    }
-
-    public void setResidualAmount(Integer residualAmount) {
-        this.residualAmount = residualAmount;
-    }
-
-    public BigDecimal getCostPrice() {
-        return costPrice;
-    }
-
-    public void setCostPrice(BigDecimal costPrice) {
-        this.costPrice = costPrice;
-    }
-
-    public BigDecimal getSubtotal() {
-        return subtotal;
-    }
-
-    public void setSubtotal(BigDecimal subtotal) {
-        this.subtotal = subtotal;
-    }
+    private float subtotal;
 }

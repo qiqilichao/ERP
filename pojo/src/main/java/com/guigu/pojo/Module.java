@@ -11,7 +11,7 @@ import java.util.Date;
 
 @Data
 @TableName("d_module")
-public class Module {
+public class Module extends Dfile{
     @TableId(type = IdType.AUTO)
     private Integer id;
 
