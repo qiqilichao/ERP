@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 
 public class IdUtil {
+
+
     //产品编号
     public String ProductId(Dfile dfile){
         String id = dfile.getProductId();
@@ -49,17 +51,26 @@ public class IdUtil {
     }
 
     //生产计划编号
-    public String ApplyId(Apply apply){
+    public static String ApplyId(Apply apply){
+
+
+
+
+        int b=0;
+        String str2="0001";
+
         //获取当前时间
         Date dt=new Date();
         SimpleDateFormat matter1=new SimpleDateFormat("yyyyMMdd");
         String date =  matter1.format(dt);
+        if(apply!=null){
+            String id=apply.getApplyId();
+            b= Integer.parseInt(id.substring(id.length()-4));
+            b++;
+            DecimalFormat df=new DecimalFormat("0000");
+            str2=df.format(b);
 
-        String id=apply.getApplyId();
-        int b= Integer.parseInt(id.substring(id.length()-4));
-        b++;
-        DecimalFormat df=new DecimalFormat("0000");
-        String str2=df.format(b);
+        }
         return "300"+date+str2;
     }
 
