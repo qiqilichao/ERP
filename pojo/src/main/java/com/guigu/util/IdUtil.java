@@ -54,8 +54,6 @@ public class IdUtil {
     public static String ApplyId(Apply apply){
 
 
-
-
         int b=0;
         String str2="0001";
 
