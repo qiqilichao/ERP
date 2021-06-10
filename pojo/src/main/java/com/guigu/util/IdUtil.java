@@ -72,6 +72,23 @@ public class IdUtil {
         return "300"+date+str2;
     }
 
+    public static String ApplyId(int index){
+
+
+        int b=0;
+        String str2=""+index;
+
+        //获取当前时间
+        Date dt=new Date();
+        SimpleDateFormat matter1=new SimpleDateFormat("yyyyMMdd");
+        String date =  matter1.format(dt);
+
+        DecimalFormat df=new DecimalFormat("0000");
+        str2=df.format(Integer.parseInt(str2));
+
+        return "300"+date+str2;
+    }
+
     //派工单编号
     public String ManufactureId(Manufacture manufacture){
         //获取当前时间
