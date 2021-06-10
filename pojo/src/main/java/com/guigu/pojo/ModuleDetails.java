@@ -31,7 +31,7 @@ public class ModuleDetails extends Module {
 
     private Integer residualAmount;
 
-    private float costPrice;
+    private Float costPrice;
 
-    private float subtotal;
+    private Float subtotal;
 }

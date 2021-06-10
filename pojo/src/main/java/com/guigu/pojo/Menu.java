@@ -10,9 +10,9 @@ import java.util.List;
 
 @Data
 @TableName("sys_menus")
-public class Menu {
+public class Menu extends Dfile{
     @TableId(value = "ID",type = IdType.AUTO)
-    private int id;
+    private Integer id;
 
 //    @TableField("PARENT_ID")
     private int parentId;
