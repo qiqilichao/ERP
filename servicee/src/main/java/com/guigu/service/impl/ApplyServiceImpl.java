@@ -1,7 +1,9 @@
 package com.guigu.service.impl;
 
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.guigu.dto.ApplyDto;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.rmi.CORBA.Util;
+import javax.swing.event.ListDataEvent;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,6 +40,9 @@ public class ApplyServiceImpl extends ServiceImpl<ApplyMapper,Apply> implements 
        /* wrapper.eq("DESIGN_MODULE_TAG","W001-1");
         wrapper.eq("DESIGN_PROCEDURE_TAG","G001-1");
         wrapper.eq("DESIGN_CELL_TAG","K001-1");*/
+       if(!StringUtils.isEmpty(dfile.getProductName())){
+           wrapper.like("PRODUCT_NAME",dfile.getProductName());
+       }
         return dfileService.page(new Page<Dfile>(pageno,pasize),wrapper);
     }
 
@@ -45,21 +51,27 @@ public class ApplyServiceImpl extends ServiceImpl<ApplyMapper,Apply> implements 
     @Override
     public boolean addApply(List<Dfile> dfilelies) {
 
+        //添加新的apply数据
         List<Apply> applies= new ArrayList<>();
 
+        List<Apply> list = this.list();
 
+       int  index =1;
+       if(list.size()>0){
+           index=list.size()+1;
+       }
 
          for (Dfile d : dfilelies) {
 
-             List<Apply> list = this.list();
-
              Apply apply= new Apply();
 
-
-             if(list.size()==0){
-                 apply.setApplyId(IdUtil.ApplyId(null));
-             }else{
-                 apply.setApplyId(IdUtil.ApplyId(list.get(list.size()-1)));
+             if(applies.size()==0){
+                 //一次新的开始
+                 apply.setApplyId(IdUtil.ApplyId(index));
+             }else {
+                 Apply apply1= applies.get(applies.size()-1);
+                 String applyId = apply1.getApplyId();
+                 apply.setApplyId(IdUtil.ApplyId(1+Integer.parseInt( applyId.substring(applyId.length()-4))) );
              }
 
              apply.setProductId(d.getProductId());
@@ -74,7 +86,7 @@ public class ApplyServiceImpl extends ServiceImpl<ApplyMapper,Apply> implements 
              applies.add(apply);
             }
 
-         System.out.println(applies);
+
 
         return this. saveBatch(applies);
     }
