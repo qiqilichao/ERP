@@ -16,6 +16,7 @@ import com.guigu.util.IdUtil;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.security.krb5.internal.APOptions;
 
 import javax.rmi.CORBA.Util;
 import javax.swing.event.ListDataEvent;
@@ -31,7 +32,7 @@ public class ApplyServiceImpl extends ServiceImpl<ApplyMapper,Apply> implements 
     @Autowired
     private DfileService dfileService;
 
-    //查询所有
+    //查询所有Dfile
     public IPage<Dfile> pageDfile(int pageno , int pasize, Dfile dfile){
 
         QueryWrapper<Dfile> wrapper =new QueryWrapper();
@@ -46,6 +47,15 @@ public class ApplyServiceImpl extends ServiceImpl<ApplyMapper,Apply> implements 
         return dfileService.page(new Page<Dfile>(pageno,pasize),wrapper);
     }
 
+    //查询生产计划表
+    @Override
+    public IPage<Apply> pageApply(int pageno, int pagesize, Apply apply) {
+
+        QueryWrapper<Apply> wrapper= new QueryWrapper();
+        wrapper.eq("CHECK_TAG","S001-0");
+        return this.page(new Page<Apply>(pageno,pagesize),wrapper);
+    }
+
 
     //添加
     @Override
@@ -58,8 +68,13 @@ public class ApplyServiceImpl extends ServiceImpl<ApplyMapper,Apply> implements 
 
        int  index =1;
        if(list.size()>0){
-           index=list.size()+1;
-       }
+           Apply apply1= list.get(list.size()-1);
+           String applyId = apply1.getApplyId();
+           String str= applyId.substring(applyId.length()-4);
+           index=Integer.parseInt(str)+1;
+       }/*else if(list.size()>0){
+              index=list.size()+1;
+       }*/
 
          for (Dfile d : dfilelies) {
 

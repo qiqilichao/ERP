@@ -12,5 +12,7 @@ public interface ApplyService extends IService<Apply> {
 
     public IPage<Dfile> pageDfile(int pageno,int pagesize,Dfile dfile);
 
+    public IPage<Apply> pageApply(int pageno,int pagesize,Apply apply);
+
     public boolean addApply(List<Dfile> dfilelies);
 }
