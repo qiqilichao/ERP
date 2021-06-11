@@ -12,12 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2021/6/10.
  */
 @RestController
+@RequestMapping("/moduleDetail")
 @CrossOrigin
 public class ModuleDetailsController {
     @Autowired
     ModuleDetailsService moduleDetailsService;
 
-    @RequestMapping("moduleDetailadd.action")
+    @RequestMapping("/moduleDetailadd.action")
     public String modulesave(ModuleDetails moduleDetails){
         System.out.println(moduleDetails);
         return " ";
