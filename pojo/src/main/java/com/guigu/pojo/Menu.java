@@ -10,7 +10,7 @@ import java.util.List;
 
 @Data
 @TableName("sys_menus")
-public class Menu extends Dfile{
+public class Menu{
     @TableId(value = "ID",type = IdType.AUTO)
     private Integer id;
 
