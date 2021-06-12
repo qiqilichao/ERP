@@ -75,4 +75,11 @@ public class ApplyController {
     public List<Apply> applyList(){
          return applyService.list();
     }
+
+    //改变apply的审核状态
+    @RequestMapping("chenggApplychecker")
+    @ResponseBody
+    public boolean chenggApplychecker(Apply apply){
+         return applyService.updateCHECKER(apply);
+    }
 }

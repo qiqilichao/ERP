@@ -32,6 +32,9 @@ public class ApplyServiceImpl extends ServiceImpl<ApplyMapper,Apply> implements 
     @Autowired
     private DfileService dfileService;
 
+    @Autowired
+    public ApplyMapper applyMapper;
+
     //查询所有Dfile
     public IPage<Dfile> pageDfile(int pageno , int pasize, Dfile dfile){
 
@@ -104,6 +107,14 @@ public class ApplyServiceImpl extends ServiceImpl<ApplyMapper,Apply> implements 
 
 
         return this. saveBatch(applies);
+    }
+
+    @Override
+    public boolean updateCHECKER(Apply apply) {
+        int i = applyMapper.updateChecktag(apply);
+        if(i>0)
+            return true;
+        return false;
     }
 
 
