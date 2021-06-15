@@ -59,6 +59,28 @@ public class ApplyServiceImpl extends ServiceImpl<ApplyMapper,Apply> implements 
         return this.page(new Page<Apply>(pageno,pagesize),wrapper);
     }
 
+    @Override
+    //查询所有Apply
+    public IPage<Apply> pageApplyAll(int pageno, int pagesize, Apply apply) {
+
+        QueryWrapper<Apply> wrapper= new QueryWrapper();
+        if(!StringUtils.isEmpty(apply.getProductName())){
+            wrapper.like("PRODUCT_NAME",apply.getProductName());
+        }
+        if(apply.getRegisterTime()!=null){
+            wrapper.ge("REGISTER_TIME",apply.getRegisterTime());
+        }
+        if(apply.getRegisterTime2()!=null){
+            wrapper.le("REGISTER_TIME",apply.getRegisterTime2());
+        }
+
+        if(!"-1".equals(apply.getCheckTag())){
+             wrapper.eq("CHECK_TAG",apply.getCheckTag());
+        }
+
+        return this.page(new Page<Apply>(pageno,pagesize),wrapper);
+    }
+
 
     //添加
     @Override

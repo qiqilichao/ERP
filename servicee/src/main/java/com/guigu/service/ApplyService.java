@@ -14,6 +14,8 @@ public interface ApplyService extends IService<Apply> {
 
     public IPage<Apply> pageApply(int pageno,int pagesize,Apply apply);
 
+    public IPage<Apply> pageApplyAll(int pageno,int pagesize,Apply apply);
+
     public boolean addApply(List<Dfile> dfilelies);
 
     public boolean updateCHECKER(Apply apply);
