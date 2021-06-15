@@ -30,16 +30,6 @@ public class DfileServiceImpl extends ServiceImpl<DfileMapper, Dfile> implements
         return false;
     }
 
-    //查询出所有通过审核的产品档案的商品
-    @Override
-    public List<Dfile> cpshenghetg() {
-        //
-        QueryWrapper<Dfile> queryWrapper = new QueryWrapper<Dfile>();
-        queryWrapper.eq("type","Y001-1");
-        queryWrapper.eq("CHECK_TAG","S001-1");
 
-        List<Dfile> list = this.list(queryWrapper);
 
-        return list;
-    }
 }

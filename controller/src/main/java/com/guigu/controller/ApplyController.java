@@ -32,11 +32,19 @@ public class ApplyController {
                                   @RequestParam(defaultValue = "5")int pagesize,
                                   Dfile dfile){
 
-            System.out.println(dfile);
-             System.out.println(pageno);
-             System.out.println(pagesize);
+
 
          return applyService.pageDfile(pageno,pagesize,dfile);
+    }
+
+
+    //查询所有商品
+    @RequestMapping("applyIPage")
+    @ResponseBody
+    public IPage<Apply> applyIPage(@RequestParam(defaultValue = "1")int pageno,
+                                   @RequestParam(defaultValue = "8")int pagesize,
+                                   Apply apply){
+         return applyService.pageApply(pageno,pagesize,apply);
     }
 
     //添加计划生产商品
@@ -45,6 +53,12 @@ public class ApplyController {
     public boolean addApply(@RequestBody List<Dfile> dfiles){
 
          return applyService.addApply(dfiles);
+    }
+    //查询一条apply记录
+    @RequestMapping("getBApplyid")
+    @ResponseBody
+    public Apply getBApplyid(int id){
+         return applyService.getById(id);
     }
 
     //生产商品的查寻
@@ -60,5 +74,12 @@ public class ApplyController {
     @ResponseBody
     public List<Apply> applyList(){
          return applyService.list();
+    }
+
+    //改变apply的审核状态
+    @RequestMapping("chenggApplychecker")
+    @ResponseBody
+    public boolean chenggApplychecker(Apply apply){
+         return applyService.updateCHECKER(apply);
     }
 }
