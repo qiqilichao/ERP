@@ -1,12 +1,16 @@
 package com.guigu.controller;
 
-import com.guigu.pojo.Procedure;
-import com.guigu.pojo.ProcedureList;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.pagehelper.PageInfo;
+import com.guigu.pojo.*;
+import com.guigu.service.DesignProcedureDetailsService;
+import com.guigu.service.DesignProcedureService;
+import com.guigu.service.ModuleService;
 import com.guigu.service.ProcedureListService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,6 +24,23 @@ public class ProcedureController {
     @Autowired
     ProcedureListService procedureListService;
 
+    @Autowired
+    DesignProcedureService procedureService;
+
+    @Autowired
+    ModuleService moduleService;
+
+    @Autowired
+    DesignProcedureDetailsService designProcedureDetailsService;
+
+    @RequestMapping("selDesignsheet")
+    public PageInfo<Module> selDesignsheet(@RequestParam(value = "pageno",defaultValue ="1") Integer pageno,
+                                           @RequestParam(value = "pagesize",defaultValue ="5")Integer pagesize,
+                                           Module module){
+        PageInfo<Module> pageInfo = moduleService.queryAllmodule(pageno, pagesize, module);
+        return pageInfo;
+    }
+
     /**
      * 这是是查询工序
      * @return
@@ -29,4 +50,55 @@ public class ProcedureController {
         return procedureListService.list();
     }
 
+    /**
+     * 这是添加工序的方法
+     * @param procedureLists
+     * @return
+     */
+    @RequestMapping("tjgx")
+    public boolean thgx(@RequestBody List<ProcedureList> procedureLists){
+        System.out.println(procedureLists);
+        return procedureService.insdesignProceduure(procedureLists);
+    }
+
+    /**
+     * 查询出需要审核的设计单
+     * @return
+     */
+    @RequestMapping("seloexmaldepro")
+    public IPage<DesignProcedure> seloexmaldepro(@RequestParam(value = "pageno",defaultValue ="1") Integer pageno,
+                                                 @RequestParam(value = "pagesize",defaultValue ="5")Integer pagesize){
+        QueryWrapper<DesignProcedure> wrapper = new QueryWrapper<DesignProcedure>();
+        wrapper.eq("CHECK_TAG","S001-0");
+        return procedureService.page(new Page<DesignProcedure>(pageno,pagesize),wrapper);
+    }
+
+    /**
+     * 根据设计单的id查询出具体的工序
+     * @param id
+     * @return
+     */
+    @RequestMapping("seldisproById")
+    public List<DesignProcedureDetails> seldisproById(Integer id){
+        return designProcedureDetailsService.seldisproById(id);
+    }
+
+    /**
+     * 审核
+     * @param designProcedure
+     * @param radios
+     * @return
+     */
+    @RequestMapping("toexamine")
+    public boolean toexamine(DesignProcedure designProcedure,Integer radios){
+
+        return procedureService.toexamine(designProcedure,radios);
+    }
+
+    @RequestMapping("querAll")
+    public IPage<DesignProcedure> querAll(@RequestParam(value = "pageno",defaultValue ="1") Integer pageno,
+                                          @RequestParam(value = "pagesize",defaultValue ="5")Integer pagesize,
+                                          DesignProcedure designProcedure){
+        return procedureService.listAll(pageno,pagesize,designProcedure);
+    }
 }

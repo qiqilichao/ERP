@@ -1,6 +1,7 @@
 package com.guigu.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -39,13 +40,16 @@ public class DesignProcedure {
 
     private Float moduleCostPriceSum;
 
-    private String designer;
+    @TableField("designer")
+    private String designer1;
 
-    private String register;
+    @TableField("register")
+    private String register1;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    private Date registerTime;
+    @TableField("register_time")
+    private Date registerTime1;
 
     private String checker;
 
@@ -68,4 +72,20 @@ public class DesignProcedure {
     private String designModuleTag;
 
     private String designModuleChangeTag;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+    @TableField(exist = false)
+    private Date date1;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+    @TableField(exist = false)
+    private Date date2;
+
+    @TableField(exist = false)
+    public Dfile dfile;
+
+    @TableField(exist = false)
+    public Module module;
 }
