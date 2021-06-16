@@ -8,4 +8,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ProcedureListServiceImpl extends ServiceImpl<ProcedureListMapper, ProcedureList> implements ProcedureListService {
+    @Override
+    public boolean insprolist(ProcedureList procedureList) {
+
+        return false;
+    }
 }

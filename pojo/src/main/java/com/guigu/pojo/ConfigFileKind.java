@@ -1,9 +1,14 @@
 package com.guigu.pojo;
 
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
+@TableName("d_config_file_kind")
 public class ConfigFileKind {
     private Integer id;
 
@@ -15,4 +20,6 @@ public class ConfigFileKind {
 
     private Integer kindLevel;
 
+    @TableField(exist = false)
+    public List<ConfigFileKind> configFileKinds;
 }

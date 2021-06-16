@@ -9,8 +9,8 @@
         <outputRelativeToContentRoot value="true" />
         <module name="controller" />
         <module name="mapper" />
-        <module name="pojo" />
         <module name="servicee" />
+        <module name="pojo" />
       </profile>
     </annotationProcessing>
   </component>

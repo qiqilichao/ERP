@@ -38,13 +38,22 @@ public class ApplyController {
     }
 
 
-    //查询所有商品
+    //查询所有待审核商品
     @RequestMapping("applyIPage")
     @ResponseBody
     public IPage<Apply> applyIPage(@RequestParam(defaultValue = "1")int pageno,
-                                   @RequestParam(defaultValue = "8")int pagesize,
+                                   @RequestParam(defaultValue = "10")int pagesize,
                                    Apply apply){
          return applyService.pageApply(pageno,pagesize,apply);
+    }
+    //查询所有商品
+    @RequestMapping("applyAllIPage")
+    @ResponseBody
+    public IPage<Apply> applyAllIPage(@RequestParam(defaultValue = "1")int pageno,
+                                   @RequestParam(defaultValue = "10")int pagesize,
+                                   Apply apply){
+         System.out.println(apply);
+        return applyService.pageApplyAll(pageno,pagesize,apply);
     }
 
     //添加计划生产商品

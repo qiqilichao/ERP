@@ -4,15 +4,13 @@ import com.guigu.pojo.*;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+
 
 public class IdUtil {
 
-
     //产品编号
-    public String ProductId(Dfile dfile){
+    public  String ProductId(Dfile dfile){
         String id = dfile.getProductId();
         int b = Integer.parseInt(id.substring(id.length() - 6));
         b++;
@@ -22,7 +20,7 @@ public class IdUtil {
     }
 
     //物料设计单编号
-    public String ModuleId(Module module){
+    public  String ModuleId(Module module){
         Date dt=new Date();
         SimpleDateFormat matter1=new SimpleDateFormat("yyyyMMdd");
         String date =  matter1.format(dt);
@@ -36,7 +34,7 @@ public class IdUtil {
     }
 
     //工序设计单编号
-    public String DesignProcedureId(DesignProcedure designProcedure){
+    public  String DesignProcedureId(DesignProcedure designProcedure){
         //获取当前时间
         Date dt=new Date();
         SimpleDateFormat matter1=new SimpleDateFormat("yyyyMMdd");
