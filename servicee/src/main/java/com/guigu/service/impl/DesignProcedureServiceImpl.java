@@ -6,12 +6,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.guigu.mapper.DesignProcedureMapper;
 import com.guigu.mapper.DfileMapper;
-import com.guigu.pojo.DesignProcedure;
-import com.guigu.pojo.DesignProcedureDetails;
-import com.guigu.pojo.Module;
-import com.guigu.pojo.ProcedureList;
+import com.guigu.pojo.*;
 import com.guigu.service.DesignProcedureDetailsService;
 import com.guigu.service.DesignProcedureService;
+import com.guigu.service.DfileService;
+import com.guigu.service.ModuleService;
 import com.guigu.util.IdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +28,12 @@ public class DesignProcedureServiceImpl extends ServiceImpl<DesignProcedureMappe
 
     @Autowired
     DfileMapper dfileMapper;
+
+    @Autowired
+    DfileService dfileService;
+
+    @Autowired
+    ModuleService moduleService;
 
     @Override
     public boolean insdesignProceduure(List<ProcedureList> procedureLists) {
@@ -105,6 +110,16 @@ public class DesignProcedureServiceImpl extends ServiceImpl<DesignProcedureMappe
         if (designProcedure.getDate2() != null) {
             wrapper.le("REGISTER_TIME", designProcedure.getDate2());
         }
-        return this.page(new Page<DesignProcedure>(pageno,pagesize),wrapper);
+        IPage<DesignProcedure> page = this.page(new Page<DesignProcedure>(pageno, pagesize), wrapper);
+
+        QueryWrapper<Dfile> dfw = new QueryWrapper<Dfile>();
+        QueryWrapper<Module> mow = new QueryWrapper<Module>();
+        for (DesignProcedure d : page.getRecords()){
+            dfw.eq("PRODUCT_ID",d.getProductId());
+            d.setDfile(dfileService.getOne(dfw));
+            mow.eq("DESIGN_ID",d.getDesignId());
+            d.setModule(moduleService.getOne(mow));
+        }
+        return page;
     }
 }
