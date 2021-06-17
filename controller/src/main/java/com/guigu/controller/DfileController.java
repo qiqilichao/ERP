@@ -8,10 +8,7 @@ import com.guigu.pojo.Dfile;
 import com.guigu.service.DfileService;
 import com.guigu.util.IdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.rmi.CORBA.Util;
 import java.util.List;
@@ -27,8 +24,7 @@ public class DfileController {
     public boolean add(Dfile dfile) {
         IdUtil idUtil = new IdUtil();
         List<Dfile> list = dfileService.list();
-        String productId = idUtil.ProductId(list.get(list.size() - 1));
-        dfile.setProductId(productId);
+
         String kindName = dfile.getFirstKindName();
         if (kindName.equals("电子")) {
             dfile.setFirstKindId("01");
@@ -57,6 +53,8 @@ public class DfileController {
         dfile.setDesignModuleTag("W001-0");
         dfile.setDesignProcedureTag("G001-0");
         dfile.setDesignCellTag("K001-0");
+        String productId = "100"+dfile.getFirstKindId()+dfile.getSecondKindId()+dfile.getThirdKindId()+idUtil.ProductId(list.get(list.size() - 1));
+        dfile.setProductId(productId);
         return dfileService.save(dfile);
     }
     @RequestMapping("/cpshenghetg.action")
@@ -85,5 +83,31 @@ public class DfileController {
         queryWrapper.eq("CHECK_TAG", "S001-1");
        List<Dfile> list = dfileService.list(queryWrapper);
        return list;
+    }
+    //根据未审核查询数据
+    @RequestMapping("/fileShenhe.action")
+    public IPage<Dfile> fileShenhe(@RequestParam(value = "pageno", defaultValue = "1") int pageno,
+                                   @RequestParam(value = "pagesize", defaultValue = "10") int pagesize,
+                                   Dfile dfile){
+        QueryWrapper<Dfile> queryWrapper = new QueryWrapper<Dfile>();
+        queryWrapper.eq("CHECK_TAG", "S001-0");
+
+        return dfileService.page(new Page<Dfile>(pageno, pagesize), queryWrapper);
+    }
+    //审核通过
+    @RequestMapping("/through.action")
+    public boolean through(Dfile dfile){
+        System.out.println(dfile);
+        dfile.setCheckTag("S001-1");
+        boolean b = dfileService.updateById(dfile);
+        return b;
+    }
+    //不审核通过
+    @RequestMapping("/notthrough.action")
+    public boolean notthrough(Dfile dfile){
+        System.out.println(dfile);
+        dfile.setCheckTag("S001-2");
+        boolean b = dfileService.updateById(dfile);
+        return b;
     }
 }
