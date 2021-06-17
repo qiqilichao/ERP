@@ -3,13 +3,14 @@ package com.guigu.pojo;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.guigu.dto.ModuleDto;
 import lombok.Data;
 
 
 
 @Data
 @TableName("d_module_details")
-public class ModuleDetails extends Module {
+public class ModuleDetails  {
     @TableId(type = IdType.AUTO)
     private Integer id;
 

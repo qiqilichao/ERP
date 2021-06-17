@@ -1,66 +1,88 @@
 package com.guigu.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.guigu.mapper.ModuleMapper;
 import com.guigu.pojo.Dfile;
 import com.guigu.pojo.Module;
-import com.guigu.service.ConfigFileKindService;
+import com.guigu.pojo.ModuleDetails;
 import com.guigu.service.DfileService;
+import com.guigu.service.ModuleDetailsService;
 import com.guigu.service.ModuleService;
+import com.guigu.util.IdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+/**
+ * @author shijianghua
+ * @date 2021/6/10.
+ */
 @Service
 public class ModuleServiceImpl extends ServiceImpl<ModuleMapper, Module> implements ModuleService {
     @Autowired
-    DfileService dfileService;
-
+    ModuleService moduleService;
     @Autowired
-    ConfigFileKindService configFileKindService;
-
+    ModuleDetailsService moduleDetailsService;
+    @Autowired
+    DfileService dfileService;
     @Override
-    public PageInfo<Module> queryAllmodule(Integer pageno, Integer pagesize, Module module) {
+    public boolean gobuy(List<Module> module) {
+        List<Module> list = this.list();
+        Dfile dfile = new Dfile();
+        Module module3 = new Module();
+         ModuleDetails moduleDetails = new ModuleDetails();
+        int i=0;
+        Float hh=0F;
+        for (Module module2 : module) {
+             Float subtotal = module2.getSubtotal();
+             hh+=subtotal;
+            i+=1;
+            if(i==1){
 
-        QueryWrapper<Dfile> dfwrapper = new QueryWrapper<Dfile>();
-        dfwrapper.eq("DESIGN_PROCEDURE_TAG","G001-0");
-        dfwrapper.eq("TYPE","Y001-1");
-        List<Dfile> list2 = dfileService.list(dfwrapper);
-        System.out.println(list2);
-        if (list2.size()>0) {
-            QueryWrapper<Module> wrapper = new QueryWrapper<Module>();
-            wrapper.eq("CHECK_TAG", "S001-1");
-            if (module.getFirstKindId() != null) {
-                wrapper.eq("FIRST_KIND_ID", module.getFirstKindId());
+                if (list.size()>0) {
+                    module3.setDesignId(new IdUtil().ModuleId(list.get(list.size() - 1)));
+                }else{
+                    Date dt=new Date();
+                    SimpleDateFormat matter1=new SimpleDateFormat("yyyyMMdd");
+                    String date =  matter1.format(dt);
+                    module3.setDesignId("200"+date+"0001");
+                }
+                module3.setProductId(module2.getProductid());
+                module3.setProductName(module2.getProductname());
+                module3.setCheckTag("S001-0");
+                module3.setRegisterTime(new Date());
+                module3.setChangeTag("B002-0");
+
+
+                module3.setCostPriceSum(hh);
+                 boolean save = moduleService.save(module3);
+
             }
-            if (module.getSecondKindId() != null) {
-                wrapper.eq("SECOND_KIND_ID", module.getSecondKindId());
-            }
-            if (module.getThirdKindId() != null) {
-                wrapper.eq("THIRD_KIND_ID", module.getThirdKindId());
-            }
-            if (module.getDate1() != null) {
-                wrapper.ge("REGISTER_TIME", module.getDate1());
-            }
-            if (module.getDate2() != null) {
-                wrapper.le("REGISTER_TIME", module.getDate2());
-            }
-            PageHelper.startPage(pageno, pagesize);
-            List<Module> list = this.list(wrapper);
-            for (Module m : list) {
-                dfwrapper.eq("PRODUCT_ID", m.getProductId());
-                Dfile one = dfileService.getOne(dfwrapper);
-                m.setDfile(one);
-            }
-            return new PageInfo<Module>(list);
+
+            moduleDetails.setParentId(module3.getId());
+            moduleDetails.setDetailsNumber(module2.getId());
+            moduleDetails.setProductId(module2.getProductId());
+            moduleDetails.setAmount(module2.getAmount());
+            moduleDetails.setCostPrice(module2.getCostPrice());
+            moduleDetails.setSubtotal(module2.getSubtotal());
+            moduleDetails.setResidualAmount(module2.getResidualAmount());
+            moduleDetailsService.save(moduleDetails);
+
+            Integer did = module2.getDid();
+            Dfile byId = dfileService.getById(did);
+                String designModuleTag = byId.getDesignModuleTag();
+                designModuleTag="W001-1";
+                byId.setDesignModuleTag(designModuleTag);
+              dfileService.updateById(byId);
+
         }
-        return new PageInfo<Module>();
+
+
+        return true;
     }
 }

@@ -8,4 +8,5 @@ import com.guigu.pojo.ModuleDetails;
  * @date 2021/6/10.
  */
 public interface ModuleDetailsService extends IService<ModuleDetails> {
+
 }

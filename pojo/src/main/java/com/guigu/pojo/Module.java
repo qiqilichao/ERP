@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.guigu.dto.ModuleDto;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Data
 @TableName("d_module")
-public class Module{
+public class Module extends Dfile{
     @TableId(type = IdType.AUTO)
     private Integer id;
 
@@ -62,23 +63,4 @@ public class Module{
     private String checkTag;
 
     private String changeTag;
-
-    @TableField(exist = false)
-    private List<ModuleDetails> moduleDetails;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
-    @TableField(exist = false)
-    private Date date1;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
-    @TableField(exist = false)
-    private Date date2;
-
-    @TableField(exist = false)
-    public Dfile dfile;
-
-    @TableField(exist = false)
-    public List<ConfigFileKind> configFileKinds;
 }
