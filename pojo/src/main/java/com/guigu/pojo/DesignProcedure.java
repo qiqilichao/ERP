@@ -87,5 +87,5 @@ public class DesignProcedure {
     public Dfile dfile;
 
     @TableField(exist = false)
-    public Module module;
+    public String checktags;
 }

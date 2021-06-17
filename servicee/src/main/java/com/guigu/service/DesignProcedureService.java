@@ -20,4 +20,10 @@ public interface DesignProcedureService extends IService<DesignProcedure> {
 
     //查询出全部的设计单
     IPage<DesignProcedure> listAll(Integer pageno,Integer pagesize,DesignProcedure designProcedure);
+
+    //查询出审核通过的设计单
+    IPage<DesignProcedure> seloexmaldeprook(Integer pageno,Integer pagesize,DesignProcedure designProcedure);
+
+    //添加更改的工序数据
+    boolean insnewdesignProceduur(List<ProcedureList> procedureLists);
 }

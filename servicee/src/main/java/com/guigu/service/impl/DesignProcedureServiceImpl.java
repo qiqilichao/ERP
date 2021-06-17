@@ -12,10 +12,11 @@ import com.guigu.service.DesignProcedureService;
 import com.guigu.service.DfileService;
 import com.guigu.service.ModuleService;
 import com.guigu.util.IdUtil;
+import net.sf.jsqlparser.statement.upsert.Upsert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,7 +51,9 @@ public class DesignProcedureServiceImpl extends ServiceImpl<DesignProcedureMappe
         boolean disprosave = this.save(updstu);
         List<DesignProcedureDetails> dpd = new ArrayList<DesignProcedureDetails>();
         if (disprosave){
+            //修改状态
             dfileMapper.upddfilegx(updstu.getProductId());
+
             int index=1;
             for (ProcedureList p : procedureLists){
                 DesignProcedureDetails details = new DesignProcedureDetails();
@@ -95,31 +98,98 @@ public class DesignProcedureServiceImpl extends ServiceImpl<DesignProcedureMappe
     @Override
     public IPage<DesignProcedure> listAll(Integer pageno, Integer pagesize, DesignProcedure designProcedure) {
         QueryWrapper<DesignProcedure> wrapper = new QueryWrapper<DesignProcedure>();
-        if (designProcedure.getFirstKindId() != null) {
-            wrapper.eq("FIRST_KIND_ID", designProcedure.getFirstKindId());
+        if (!StringUtils.isEmpty(designProcedure)){
+            if (!StringUtils.isEmpty(designProcedure.getFirstKindId())) {
+                wrapper.eq("FIRST_KIND_ID", designProcedure.getFirstKindId());
+            }
+            if (!StringUtils.isEmpty(designProcedure.getSecondKindId())) {
+                wrapper.eq("SECOND_KIND_ID", designProcedure.getSecondKindId());
+            }
+            if (!StringUtils.isEmpty(designProcedure.getThirdKindId())) {
+                wrapper.eq("THIRD_KIND_ID", designProcedure.getThirdKindId());
+            }
+            if (!StringUtils.isEmpty(designProcedure.getDate1())) {
+                wrapper.ge("REGISTER_TIME", designProcedure.getDate1());
+            }
+            if (!StringUtils.isEmpty(designProcedure.getDate2())) {
+                wrapper.le("REGISTER_TIME", designProcedure.getDate2());
+            }
+            if (!StringUtils.isEmpty(designProcedure.getChecktags())){
+                wrapper.eq("CHECK_TAG",designProcedure.getChecktags());
+            }
         }
-        if (designProcedure.getSecondKindId() != null) {
-            wrapper.eq("SECOND_KIND_ID", designProcedure.getSecondKindId());
-        }
-        if (designProcedure.getThirdKindId() != null) {
-            wrapper.eq("THIRD_KIND_ID", designProcedure.getThirdKindId());
-        }
-        if (designProcedure.getDate1() != null) {
-            wrapper.ge("REGISTER_TIME", designProcedure.getDate1());
-        }
-        if (designProcedure.getDate2() != null) {
-            wrapper.le("REGISTER_TIME", designProcedure.getDate2());
-        }
-        IPage<DesignProcedure> page = this.page(new Page<DesignProcedure>(pageno, pagesize), wrapper);
+        IPage<DesignProcedure> page = this.page(new Page<DesignProcedure>(pageno, pagesize),wrapper);
 
         QueryWrapper<Dfile> dfw = new QueryWrapper<Dfile>();
-        QueryWrapper<Module> mow = new QueryWrapper<Module>();
         for (DesignProcedure d : page.getRecords()){
             dfw.eq("PRODUCT_ID",d.getProductId());
             d.setDfile(dfileService.getOne(dfw));
-            mow.eq("DESIGN_ID",d.getDesignId());
-            d.setModule(moduleService.getOne(mow));
         }
         return page;
+    }
+
+    @Override
+    public IPage<DesignProcedure> seloexmaldeprook(Integer pageno, Integer pagesize, DesignProcedure designProcedure) {
+        QueryWrapper<DesignProcedure> wrapper = new QueryWrapper<DesignProcedure>();
+        wrapper.eq("CHECK_TAG","S001-1");
+        if (!StringUtils.isEmpty(designProcedure)){
+            if (!StringUtils.isEmpty(designProcedure.getFirstKindId())) {
+                wrapper.eq("FIRST_KIND_ID", designProcedure.getFirstKindId());
+            }
+            if (!StringUtils.isEmpty(designProcedure.getSecondKindId())) {
+                wrapper.eq("SECOND_KIND_ID", designProcedure.getSecondKindId());
+            }
+            if (!StringUtils.isEmpty(designProcedure.getThirdKindId())) {
+                wrapper.eq("THIRD_KIND_ID", designProcedure.getThirdKindId());
+            }
+            if (!StringUtils.isEmpty(designProcedure.getDate1())) {
+                wrapper.ge("REGISTER_TIME", designProcedure.getDate1());
+            }
+            if (!StringUtils.isEmpty(designProcedure.getDate2())) {
+                wrapper.le("REGISTER_TIME", designProcedure.getDate2());
+            }
+//            if (!StringUtils.isEmpty(designProcedure.getProductName())){
+//                wrapper.eq("PRODUCT_NAME",designProcedure.getProductName());
+//            }
+        }
+        return this.page(new Page<DesignProcedure>(pageno, pagesize),wrapper);
+    }
+
+    @Override
+    public boolean insnewdesignProceduur(List<ProcedureList> procedureLists) {
+        //获取数据并进行修改设计单的数据
+        DesignProcedure updstu = procedureLists.get(0).getUpdstu();
+        updstu.setCheckTag("S001-0");
+        updstu.setChangeTag("B002-1");
+        boolean b = this.updateById(updstu);
+        //修改成功
+        List<DesignProcedureDetails> dpd = new ArrayList<DesignProcedureDetails>();
+        if (!StringUtils.isEmpty(procedureLists.get(0).getId())){
+
+            //查询出这个设计单的最后一个工序编号，以方便增加
+            QueryWrapper<DesignProcedureDetails> wrapper = new QueryWrapper<DesignProcedureDetails>();
+            wrapper.eq("PARENT_ID",updstu.getId());
+            List<DesignProcedureDetails> list = designProcedureDetailsService.list(wrapper);
+            DesignProcedureDetails de=list.get(list.size()-1);
+            int index = de.getDetailsNumber();
+            for (ProcedureList p : procedureLists){
+                DesignProcedureDetails details = new DesignProcedureDetails();
+                details.setParentId(updstu.getId());
+                details.setDetailsNumber(index+1);
+                index++;
+                details.setProcedureId(p.getTypeId());
+                details.setProcedureName(p.getTypeName());
+                details.setLabourHourAmount(p.getLabourHourAmount());
+                details.setAmountUnit(p.getAmountUnit());
+                details.setCostPrice(p.getCostPrice());
+                details.setSubtotal(p.getSubtotal());
+                details.setRegister(updstu.getRegister1());
+                details.setRegisterTime(updstu.getRegisterTime1());
+                details.setDesignModuleTag("D002-0");
+                details.setDesignModuleChangeTag("D003-0");
+                dpd.add(details);
+            }
+        }
+        return designProcedureDetailsService.saveBatch(dpd);
     }
 }

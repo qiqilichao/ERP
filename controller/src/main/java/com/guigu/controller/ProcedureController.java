@@ -57,7 +57,6 @@ public class ProcedureController {
      */
     @RequestMapping("tjgx")
     public boolean thgx(@RequestBody List<ProcedureList> procedureLists){
-        System.out.println(procedureLists);
         return procedureService.insdesignProceduure(procedureLists);
     }
 
@@ -95,10 +94,50 @@ public class ProcedureController {
         return procedureService.toexamine(designProcedure,radios);
     }
 
+    /**
+     * 查询出设计单的全部数据
+     * @param pageno
+     * @param pagesize
+     * @param designProcedure
+     * @return
+     */
     @RequestMapping("querAll")
     public IPage<DesignProcedure> querAll(@RequestParam(value = "pageno",defaultValue ="1") Integer pageno,
                                           @RequestParam(value = "pagesize",defaultValue ="5")Integer pagesize,
                                           DesignProcedure designProcedure){
         return procedureService.listAll(pageno,pagesize,designProcedure);
+    }
+
+    /**
+     * 查询出审核通过的设计单
+     * @return
+     */
+    @RequestMapping("seloexmaldeprook")
+    public IPage<DesignProcedure> seloexmaldeprook(@RequestParam(value = "pageno",defaultValue ="1") Integer pageno,
+                                                   @RequestParam(value = "pagesize",defaultValue ="5")Integer pagesize,
+                                                   DesignProcedure designProcedure){
+        return procedureService.seloexmaldeprook(pageno,pagesize,designProcedure);
+    }
+
+    /**
+     * 删除工序的方法
+     * @param proid
+     * @param id
+     * @return
+     */
+    @RequestMapping("delprolist")
+    public boolean delprolist(Integer proid,Integer id){
+        return procedureListService.delprolist(proid,id);
+    }
+
+    /**
+     * 更改
+     * @param procedureLists
+     * @return
+     */
+    @RequestMapping("upddispro")
+    public boolean upddispro(@RequestBody List<ProcedureList> procedureLists){
+
+        return procedureService.insnewdesignProceduur(procedureLists);
     }
 }

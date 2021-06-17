@@ -34,6 +34,7 @@ public class ProcedureList {
     @TableField(exist = false)
     public DesignProcedure updstu;
 
+
     @TableField(exist = false)
     private Float labourHourAmount;
     @TableField(exist = false)

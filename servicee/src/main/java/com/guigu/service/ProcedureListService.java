@@ -3,7 +3,9 @@ package com.guigu.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.guigu.pojo.ProcedureList;
 
+import java.util.List;
+
 public interface ProcedureListService extends IService<ProcedureList> {
-    //添加工序
-    boolean insprolist(ProcedureList procedureList);
+    //删除工序
+    boolean delprolist(Integer proid,Integer id);
 }

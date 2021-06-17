@@ -2,5 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.guigu.mapper.DesignProcedureMapper">
     
-
+    <update id="upddestag" parameterType="java.lang.Integer">
+        UPDATE `m_design_procedure` SET CHECK_TAG='S001-0' WHERE id=#{id}
+    </update>
 </mapper>
