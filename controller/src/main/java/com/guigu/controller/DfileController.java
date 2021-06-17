@@ -8,10 +8,11 @@ import com.guigu.pojo.Dfile;
 import com.guigu.service.DfileService;
 import com.guigu.util.IdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.rmi.CORBA.Util;
-import javax.servlet.http.HttpServletRequest;
+
 import java.util.List;
 
 @RestController
@@ -62,11 +63,12 @@ public class DfileController {
     public IPage<Dfile> queryallcartype(@RequestParam(value = "pageno", defaultValue = "1") int pageno,
                                         @RequestParam(value = "pagesize", defaultValue = "10") int pagesize,
                                         Dfile dfile) {
+
         //组装查询条件
         QueryWrapper<Dfile> queryWrapper = new QueryWrapper<Dfile>();
         queryWrapper.eq("type", "Y001-1");
         queryWrapper.eq("CHECK_TAG", "S001-1");
-        queryWrapper.eq("CHANGE_TAG", "W001-0");
+        queryWrapper.eq("DESIGN_MODULE_TAG", "W001-0");
 
         return dfileService.page(new Page<Dfile>(pageno, pagesize), queryWrapper);
 
@@ -87,10 +89,23 @@ public class DfileController {
     //根据未审核查询数据
     @RequestMapping("/fileShenhe.action")
     public IPage<Dfile> fileShenhe(@RequestParam(value = "pageno", defaultValue = "1") int pageno,
-                                   @RequestParam(value = "pagesize", defaultValue = "10") int pagesize,
+                                   @RequestParam(value = "pagesize", defaultValue = "5") int pagesize,
                                    Dfile dfile){
         QueryWrapper<Dfile> queryWrapper = new QueryWrapper<Dfile>();
         queryWrapper.eq("CHECK_TAG", "S001-0");
+
+        return dfileService.page(new Page<Dfile>(pageno, pagesize), queryWrapper);
+    }
+    //根据审核通过查询数据
+    @RequestMapping("/approved.action")
+    public IPage<Dfile> approved(@RequestParam(value = "pageno", defaultValue = "1") int pageno,
+                                   @RequestParam(value = "pagesize", defaultValue = "5") int pagesize,
+                                   Dfile dfile){
+        QueryWrapper<Dfile> queryWrapper = new QueryWrapper<Dfile>();
+        if(!StringUtils.isEmpty(dfile.getProductName())){
+            queryWrapper.like("PRODUCT_NAME",dfile.getProductName());
+        }
+        queryWrapper.eq("CHECK_TAG", "S001-1");
 
         return dfileService.page(new Page<Dfile>(pageno, pagesize), queryWrapper);
     }
