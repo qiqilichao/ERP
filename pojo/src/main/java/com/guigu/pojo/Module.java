@@ -14,7 +14,7 @@ import java.util.List;
 
 @Data
 @TableName("d_module")
-public class Module extends Dfile{
+public class Module extends ModuleDto{
     @TableId(type = IdType.AUTO)
     private Integer id;
 

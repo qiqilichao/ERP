@@ -9,4 +9,5 @@ import com.guigu.pojo.ModuleDetails;
  */
 public interface ModuleDetailsService extends IService<ModuleDetails> {
 
+
 }

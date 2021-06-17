@@ -31,6 +31,7 @@ public class ModuleDto {
     private Float subtotal;
     @TableField(exist = false)
     private Float realCostPrice;
+
     @TableField(exist = false)
     private Integer did;
 }

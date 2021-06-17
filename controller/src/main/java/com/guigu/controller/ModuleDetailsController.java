@@ -25,5 +25,6 @@ public class ModuleDetailsController {
     @RequestMapping("/moduleDetailadd.action")
     public String modulesave(){
         return " ";
+
     }
 }

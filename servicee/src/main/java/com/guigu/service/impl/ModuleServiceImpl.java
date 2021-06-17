@@ -1,7 +1,8 @@
 package com.guigu.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.PageInfo;
 import com.guigu.mapper.ModuleMapper;
 import com.guigu.pojo.Dfile;
 import com.guigu.pojo.Module;
@@ -30,6 +31,12 @@ public class ModuleServiceImpl extends ServiceImpl<ModuleMapper, Module> impleme
     ModuleDetailsService moduleDetailsService;
     @Autowired
     DfileService dfileService;
+
+    @Override
+    public PageInfo<Module> queryAllmodule(Integer pageno, Integer pagesize, Module module) {
+        return null;
+    }
+
     @Override
     public boolean gobuy(List<Module> module) {
         List<Module> list = this.list();
