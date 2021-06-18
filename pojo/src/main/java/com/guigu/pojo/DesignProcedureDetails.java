@@ -1,11 +1,13 @@
 package com.guigu.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.util.Date;
+
 
 @Data
 @TableName("m_design_procedure_details")
@@ -16,6 +18,9 @@ public class DesignProcedureDetails {
     private Integer parentId;
 
     private Integer detailsNumber;
+
+    @TableField(exist = false)
+    private String designId;
 
     private String procedureId;
 

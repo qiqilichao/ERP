@@ -11,8 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.*;
 
-
+import javax.rmi.CORBA.Util;
 import java.util.List;
 
 @RestController
@@ -26,7 +27,8 @@ public class DfileController {
     public boolean add(Dfile dfile) {
         IdUtil idUtil = new IdUtil();
         List<Dfile> list = dfileService.list();
-
+        String productId = idUtil.ProductId(list.get(list.size() - 1));
+        dfile.setProductId(productId);
         String kindName = dfile.getFirstKindName();
         if (kindName.equals("电子")) {
             dfile.setFirstKindId("01");
@@ -85,6 +87,15 @@ public class DfileController {
         queryWrapper.eq("CHECK_TAG", "S001-1");
        List<Dfile> list = dfileService.list(queryWrapper);
        return list;
+    }
+
+
+    @RequestMapping("quertyBypid")
+    @ResponseBody
+    //wq查询产品是否完成所有设计
+    public boolean quertyBypid(String productId){
+        System.out.println(productId);
+        return dfileService.quertyBypid(productId);
     }
     //根据未审核查询数据
     @RequestMapping("/fileShenhe.action")

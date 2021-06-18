@@ -57,4 +57,7 @@ public class Manufacture {
 
     private String manufactureProcedureTag;
 
+    /*@TableField(exist = false)
+    private List<DesignProcedureDetails> designProcedureDetailsList;
+*/
 }

@@ -57,6 +57,7 @@ public class ProcedureController {
      */
     @RequestMapping("tjgx")
     public boolean thgx(@RequestBody List<ProcedureList> procedureLists){
+        System.out.println(procedureLists);
         return procedureService.insdesignProceduure(procedureLists);
     }
 

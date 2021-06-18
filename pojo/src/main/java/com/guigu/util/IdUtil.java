@@ -48,10 +48,8 @@ public class IdUtil {
         return "201"+date+str2;
     }
 
-    //生产计划编号
-    public static String ApplyId(Apply apply){
-
-
+    //生产总表编号
+    public static String manufactureId(Manufacture manufacture){
         int b=0;
         String str2="0001";
 
@@ -59,19 +57,19 @@ public class IdUtil {
         Date dt=new Date();
         SimpleDateFormat matter1=new SimpleDateFormat("yyyyMMdd");
         String date =  matter1.format(dt);
-        if(apply!=null){
-            String id=apply.getApplyId();
+        if(manufacture!=null){
+            String id=manufacture.getManufactureId();
             b= Integer.parseInt(id.substring(id.length()-4));
             b++;
             DecimalFormat df=new DecimalFormat("0000");
             str2=df.format(b);
 
         }
-        return "300"+date+str2;
+        return "500"+date+str2;
     }
 
+    //生产计划编号
     public static String ApplyId(int index){
-
 
         int b=0;
         String str2=""+index;

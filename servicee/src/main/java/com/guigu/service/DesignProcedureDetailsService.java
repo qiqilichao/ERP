@@ -9,4 +9,7 @@ public interface DesignProcedureDetailsService extends IService<DesignProcedureD
 
     //根据设计单的id查询出具体的工序
     List<DesignProcedureDetails> seldisproById(Integer id);
+
+    //根据成品id查询工序
+    List<DesignProcedureDetails> listBypid(String productId);
 }
