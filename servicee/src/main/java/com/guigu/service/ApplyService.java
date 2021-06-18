@@ -16,6 +16,9 @@ public interface ApplyService extends IService<Apply> {
 
     public IPage<Apply> pageApplyAll(int pageno,int pagesize,Apply apply);
 
+    //制动生产调动查寻
+    public List<Apply> formulatelist(Apply apply);
+
     public boolean addApply(List<Dfile> dfilelies);
 
     public boolean updateCHECKER(Apply apply);

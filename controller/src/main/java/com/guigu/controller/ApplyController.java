@@ -55,6 +55,12 @@ public class ApplyController {
          System.out.println(apply);
         return applyService.pageApplyAll(pageno,pagesize,apply);
     }
+    //查询所有通过审核为派工产品
+    @RequestMapping("formulateList")
+    @ResponseBody
+    public List<Apply> formulateList(Apply apply){
+         return applyService.formulatelist(apply);
+    }
 
     //添加计划生产商品
     @RequestMapping("addApply")

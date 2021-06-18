@@ -81,6 +81,22 @@ public class ApplyServiceImpl extends ServiceImpl<ApplyMapper,Apply> implements 
         return this.page(new Page<Apply>(pageno,pagesize),wrapper);
     }
 
+    //生产调动
+    @Override
+    public List<Apply> formulatelist(Apply apply) {
+
+        QueryWrapper<Apply> wrapper = new QueryWrapper<>();
+         wrapper.eq("CHECK_TAG","S001-1");
+         wrapper.eq("MANUFACTURE_TAG","P001-0");
+         if(!StringUtils.isEmpty(apply.getProductId())){
+             wrapper.eq("PRODUCT_ID",apply.getProductId());
+         }
+         if(!StringUtils.isEmpty(apply.getProductName())){
+             wrapper.like("PRODUCT_NAME",apply.getProductName());
+         }
+        return this.list(wrapper);
+    }
+
 
     //添加
     @Override
