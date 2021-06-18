@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.guigu.pojo.DesignProcedure;
 import com.guigu.pojo.DesignProcedureDetails;
 import com.guigu.pojo.ProcedureList;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -26,4 +27,7 @@ public interface DesignProcedureService extends IService<DesignProcedure> {
 
     //添加更改的工序数据
     boolean insnewdesignProceduur(List<ProcedureList> procedureLists);
+
+    //查询出通过审核的设计单，并且工序物料未设计
+    IPage<DesignProcedure> selrocesslist(Integer pageno, Integer pagesize);
 }

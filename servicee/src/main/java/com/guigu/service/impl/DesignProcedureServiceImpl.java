@@ -12,7 +12,6 @@ import com.guigu.service.DesignProcedureService;
 import com.guigu.service.DfileService;
 import com.guigu.service.ModuleService;
 import com.guigu.util.IdUtil;
-import net.sf.jsqlparser.statement.upsert.Upsert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -191,5 +190,13 @@ public class DesignProcedureServiceImpl extends ServiceImpl<DesignProcedureMappe
             }
         }
         return designProcedureDetailsService.saveBatch(dpd);
+    }
+
+    @Override
+    public IPage<DesignProcedure> selrocesslist(Integer pageno, Integer pagesize) {
+        QueryWrapper<DesignProcedure> wrapper = new QueryWrapper<DesignProcedure>();
+        wrapper.eq("CHECK_TAG","S001-1");
+        wrapper.eq("DESIGN_MODULE_TAG","G002-0");
+        return this.page(new Page<DesignProcedure>(pageno,pagesize),wrapper);
     }
 }

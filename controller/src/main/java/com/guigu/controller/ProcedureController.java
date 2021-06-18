@@ -137,7 +137,25 @@ public class ProcedureController {
      */
     @RequestMapping("upddispro")
     public boolean upddispro(@RequestBody List<ProcedureList> procedureLists){
-
         return procedureService.insnewdesignProceduur(procedureLists);
+    }
+
+    /**
+     * 查询出通过审核的设计单，并且工序物料未设计
+     * @param pageno
+     * @param pagesize
+     * @return
+     */
+    @RequestMapping("selrocesslist")
+    public IPage<DesignProcedure> selrocesslist(@RequestParam(value = "pageno",defaultValue ="1") Integer pageno,
+                                               @RequestParam(value = "pagesize",defaultValue ="5")Integer pagesize){
+
+
+        return procedureService.selrocesslist(pageno,pagesize);
+    }
+
+    @RequestMapping("selprocessById")
+    public List<ModuleDetails> selprocessById(String proid){
+        return null;
     }
 }
