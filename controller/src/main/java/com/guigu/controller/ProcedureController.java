@@ -5,10 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
 import com.guigu.pojo.*;
-import com.guigu.service.DesignProcedureDetailsService;
-import com.guigu.service.DesignProcedureService;
-import com.guigu.service.ModuleService;
-import com.guigu.service.ProcedureListService;
+import com.guigu.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,11 +30,14 @@ public class ProcedureController {
     @Autowired
     DesignProcedureDetailsService designProcedureDetailsService;
 
+    @Autowired
+    DesignProcedureModuleService designmoduleService;
+
     @RequestMapping("selDesignsheet")
-    public PageInfo<Module> selDesignsheet(@RequestParam(value = "pageno",defaultValue ="1") Integer pageno,
+    public IPage<Dfile> selDesignsheet(@RequestParam(value = "pageno",defaultValue ="1") Integer pageno,
                                            @RequestParam(value = "pagesize",defaultValue ="5")Integer pagesize,
-                                           Module module){
-        PageInfo<Module> pageInfo = moduleService.queryAllmodule(pageno, pagesize, module);
+                                           Dfile module){
+        IPage<Dfile> pageInfo = moduleService.queryAllmodule(pageno, pagesize, module);
         return pageInfo;
     }
 
@@ -154,8 +154,15 @@ public class ProcedureController {
         return procedureService.selrocesslist(pageno,pagesize);
     }
 
+
+    /**
+     * 根据物料查询出组成商品的物料
+     * @param proid
+     * @return
+     */
     @RequestMapping("selprocessById")
     public List<ModuleDetails> selprocessById(String proid){
-        return null;
+        System.out.println(proid);
+        return procedureService.selprocessById(proid);
     }
 }

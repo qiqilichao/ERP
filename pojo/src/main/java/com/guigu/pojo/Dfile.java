@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import net.sf.jsqlparser.expression.DateTimeLiteralExpression;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -82,6 +81,16 @@ public class Dfile {
     private String register2;
     @TableField(exist = false)
     private String remark;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+    @TableField(exist = false)
+    private Date date1;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+    @TableField(exist = false)
+    private Date date2;
 
 
 }

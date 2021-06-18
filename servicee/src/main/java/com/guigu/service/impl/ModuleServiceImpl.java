@@ -1,8 +1,10 @@
 package com.guigu.service.impl;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.github.pagehelper.PageInfo;
 import com.guigu.mapper.ModuleMapper;
 import com.guigu.pojo.Dfile;
 import com.guigu.pojo.Module;
@@ -13,9 +15,9 @@ import com.guigu.service.ModuleService;
 import com.guigu.util.IdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,8 +35,30 @@ public class ModuleServiceImpl extends ServiceImpl<ModuleMapper, Module> impleme
     DfileService dfileService;
 
     @Override
-    public PageInfo<Module> queryAllmodule(Integer pageno, Integer pagesize, Module module) {
-        return null;
+    public IPage<Dfile> queryAllmodule(Integer pageno, Integer pagesize, Dfile module) {
+        QueryWrapper<Dfile> wrapper = new QueryWrapper<Dfile>();
+        wrapper.eq("CHECK_TAG","S001-1");
+        wrapper.eq("TYPE","Y001-1");
+        wrapper.eq("DESIGN_PROCEDURE_TAG","G001-0");
+        if (!StringUtils.isEmpty(module)){
+            if (!StringUtils.isEmpty(module.getFirstKindId())) {
+                wrapper.eq("FIRST_KIND_ID", module.getFirstKindId());
+            }
+            if (!StringUtils.isEmpty(module.getSecondKindId())) {
+                wrapper.eq("SECOND_KIND_ID", module.getSecondKindId());
+            }
+            if (!StringUtils.isEmpty(module.getThirdKindId())) {
+                wrapper.eq("THIRD_KIND_ID", module.getThirdKindId());
+            }
+            if (!StringUtils.isEmpty(module.getDate1())) {
+                wrapper.ge("REGISTER_TIME", module.getDate1());
+            }
+            if (!StringUtils.isEmpty(module.getDate2())) {
+                wrapper.le("REGISTER_TIME", module.getDate2());
+            }
+        }
+
+        return dfileService.page(new Page<Dfile>(pageno,pagesize),wrapper);
     }
 
     @Override

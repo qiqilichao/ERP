@@ -72,7 +72,6 @@ public class DesignProcedure {
     private String designModuleTag;
 
     private String designModuleChangeTag;
-
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     @TableField(exist = false)
@@ -82,6 +81,7 @@ public class DesignProcedure {
     @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     @TableField(exist = false)
     private Date date2;
+
 
     @TableField(exist = false)
     public Dfile dfile;
