@@ -57,8 +57,8 @@ public class DfileController {
         dfile.setDesignModuleTag("W001-0");
         dfile.setDesignProcedureTag("G001-0");
         dfile.setDesignCellTag("K001-0");
-        String productId = "100"+dfile.getFirstKindId()+dfile.getSecondKindId()+dfile.getThirdKindId()+idUtil.ProductId(list.get(list.size() - 1));
-        dfile.setProductId(productId);
+        String pid = "100"+dfile.getFirstKindId()+dfile.getSecondKindId()+dfile.getThirdKindId()+idUtil.ProductId(list.get(list.size() - 1));
+        dfile.setProductId(pid);
         return dfileService.save(dfile);
     }
     @RequestMapping("/cpshenghetg.action")
@@ -136,4 +136,13 @@ public class DfileController {
         boolean b = dfileService.updateById(dfile);
         return b;
     }
+    //修改数据
+    @RequestMapping("/modifythe.action")
+    public boolean modifythe(Dfile dfile){
+        System.out.println(dfile);
+        dfile.setCheckTag("S001-0");
+        boolean b = dfileService.updateById(dfile);
+        return b;
+    }
+
 }
