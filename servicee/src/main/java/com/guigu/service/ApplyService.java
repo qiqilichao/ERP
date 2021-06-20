@@ -19,6 +19,8 @@ public interface ApplyService extends IService<Apply> {
     //制动生产调动查寻
     public List<Apply> formulatelist(Apply apply);
 
+    public List<Apply> queryByproductIdList(String pid);
+
     public boolean addApply(List<Dfile> dfilelies);
 
     public boolean updateCHECKER(Apply apply);

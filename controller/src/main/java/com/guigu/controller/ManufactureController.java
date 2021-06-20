@@ -19,8 +19,7 @@ public class ManufactureController {
 
     @RequestMapping("savemanufacture")
     @ResponseBody
-    public boolean savemanufacture( @RequestBody Manufacture manufacture,
-                                    @RequestBody List<DesignProcedureDetails> designProcedureDetailsList){
+    public boolean savemanufacture(Manufacture manufacture){
 
         //return false;
         return manufactureService.addManufacture(manufacture);

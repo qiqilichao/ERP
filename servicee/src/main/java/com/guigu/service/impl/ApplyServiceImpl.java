@@ -97,6 +97,15 @@ public class ApplyServiceImpl extends ServiceImpl<ApplyMapper,Apply> implements 
         return this.list(wrapper);
     }
 
+    //生根据提交的产品id查询生产设计表
+    @Override
+    public List<Apply> queryByproductIdList(String pid) {
+        QueryWrapper<Apply> wrapper = new QueryWrapper<>();
+        wrapper.eq("PRODUCT_ID",pid);
+        wrapper.eq("CHECK_TAG","S001-1");
+        return this.list(wrapper);
+    }
+
 
     //添加
     @Override

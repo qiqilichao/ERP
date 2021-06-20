@@ -41,4 +41,5 @@
     <tx:annotation-driven transaction-manager="transactionManager"></tx:annotation-driven>
 
 
+    <jdbc:embedded-database id="dataSource"/>
 </beans>
