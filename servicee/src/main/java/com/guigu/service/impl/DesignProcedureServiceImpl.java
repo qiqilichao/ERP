@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.guigu.mapper.DesignProcedureDetailsMapper;
 import com.guigu.mapper.DesignProcedureMapper;
 import com.guigu.mapper.DfileMapper;
 import com.guigu.pojo.*;
@@ -36,6 +37,12 @@ public class DesignProcedureServiceImpl extends ServiceImpl<DesignProcedureMappe
     @Autowired
     ModuleDetailsService moduleDetailsService;
 
+    @Autowired
+    DesignProcedureModuleService designProcedureModuleService;
+
+    @Autowired
+    DesignProcedureDetailsMapper designProcedureDetailsMapper;
+
     @Transactional
     @Override
     public boolean insdesignProceduure(List<ProcedureList> procedureLists) {
@@ -49,6 +56,9 @@ public class DesignProcedureServiceImpl extends ServiceImpl<DesignProcedureMappe
             String date = matter1.format(dt);
             updstu.setDesignId("201" + date + "0001");
         }
+        updstu.setCheckTag("S001-0");
+        updstu.setChangeTag("B002-0");
+        updstu.setDesignModuleTag("G002-0");
         boolean disprosave = this.save(updstu);
         List<DesignProcedureDetails> dpd = new ArrayList<DesignProcedureDetails>();
         //修改状态
@@ -123,8 +133,10 @@ public class DesignProcedureServiceImpl extends ServiceImpl<DesignProcedureMappe
         }
         IPage<DesignProcedure> page = this.page(new Page<DesignProcedure>(pageno, pagesize), wrapper);
 
-        QueryWrapper<Dfile> dfw = new QueryWrapper<Dfile>();
+
         for (DesignProcedure d : page.getRecords()) {
+            QueryWrapper<Dfile> dfw = new QueryWrapper<Dfile>();
+            System.out.println(d.getProductId());
             dfw.eq("PRODUCT_ID", d.getProductId());
             d.setDfile(dfileService.getOne(dfw));
         }
@@ -158,6 +170,7 @@ public class DesignProcedureServiceImpl extends ServiceImpl<DesignProcedureMappe
         return this.page(new Page<DesignProcedure>(pageno, pagesize), wrapper);
     }
 
+    @Transactional
     @Override
     public boolean insnewdesignProceduur(List<ProcedureList> procedureLists) {
         //获取数据并进行修改设计单的数据
@@ -216,5 +229,87 @@ public class DesignProcedureServiceImpl extends ServiceImpl<DesignProcedureMappe
         mdwrapper.eq("PARENT_ID", one.getId());
 
         return moduleDetailsService.list(mdwrapper);
+    }
+
+    @Transactional
+    @Override
+    public boolean insprocess(List<ModuleDetails> moduleDetails) {
+        boolean upddesprodetatag = designProcedureDetailsMapper.
+                upddesprodetatag(moduleDetails.get(0).getParintid());
+
+        List<DesignProcedureModule> list = new ArrayList<DesignProcedureModule>();
+
+        int index=1;
+        for (ModuleDetails m :moduleDetails){
+            m.setResidualAmount((int) (m.getResidualAmount()-m.getAmount1()));
+            DesignProcedureModule module = new DesignProcedureModule();
+            module.setParentId(m.getParintid());
+            module.setDetailsNumber(index);
+            index++;
+            module.setProductId(m.getProductId());
+            module.setProductName(m.getProductName());
+            module.setType(m.getType());
+            module.setAmount(m.getAmount1());
+            module.setProductDescribe(m.getProductDescribe());
+            module.setAmountUnit(m.getAmountUnit());
+            module.setCostPrice(m.getCostPrice());
+            module.setSubtotal(m.getSubtotal1());
+            list.add(module);
+        }
+        boolean b = designProcedureModuleService.saveBatch(list);
+        boolean b1 = moduleDetailsService.updateBatchById(moduleDetails);
+        if (upddesprodetatag && b && b1){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean insnewprocess(List<ModuleDetails> moduleDetails) {
+        QueryWrapper<DesignProcedureModule> wrapper = new QueryWrapper<DesignProcedureModule>();
+        wrapper.eq("PARENT_ID",moduleDetails.get(0).getParintid());
+        List<DesignProcedureModule> list1 = designProcedureModuleService.list(wrapper);
+
+        int index=0;
+        for (ModuleDetails m :moduleDetails){
+//            list1.get(index).setAmount(Float.valueOf(m.getAmount1()));
+            list1.get(index).setResidualAmount(m.getResidualAmount());
+//            list1.get(index).setAmount1(m.getAmount());
+            index++;
+        }
+        boolean b = designProcedureModuleService.updateBatchById(list1);
+        boolean b1 = this.insprocess(moduleDetails);
+        if ( b && b1){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public List<ModuleDetails> selnewprocessById(String id) {
+        //查询出物料组成表中的数据
+        DesignProcedureDetails byId = designProcedureDetailsService.getById(id);
+        DesignProcedure byId1 = this.getById(byId.getParentId());
+        List<ModuleDetails> moduleDetails = this.selprocessById(byId1.getProductId());
+
+        //查询出工序物料的数据
+        QueryWrapper<DesignProcedureModule> wrapper = new QueryWrapper<DesignProcedureModule>();
+        wrapper.eq("PARENT_ID", id);
+        List<DesignProcedureModule> list = designProcedureModuleService.list(wrapper);
+        int index=0;
+        for (DesignProcedureModule m :list){
+            moduleDetails.get(index).setResidualAmount
+                    ((int) (moduleDetails.get(index).getResidualAmount()+m.getAmount()));
+            System.out.println(moduleDetails.get(index).getResidualAmount());
+            moduleDetails.get(index).setAmount1(m.getAmount());
+            index++;
+        }
+        //删除工序物料的数据
+        designProcedureModuleService.remove(wrapper);
+
+        //修改物料组成的数据
+        moduleDetailsService.updateBatchById(moduleDetails);
+
+        return moduleDetails;
     }
 }

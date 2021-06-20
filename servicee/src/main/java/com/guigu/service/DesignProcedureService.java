@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.guigu.pojo.DesignProcedure;
+import com.guigu.pojo.DesignProcedureModule;
 import com.guigu.pojo.ModuleDetails;
 import com.guigu.pojo.ProcedureList;
 
@@ -31,6 +32,16 @@ public interface DesignProcedureService extends IService<DesignProcedure> {
     //查询出通过审核的设计单，并且工序物料未设计
     IPage<DesignProcedure> selrocesslist(Integer pageno, Integer pagesize);
 
-    //查询出
+    //根据物料查询出组成商品的物料
     List<ModuleDetails> selprocessById(String id);
+
+    //添加这条工序所需的物料、
+    boolean insprocess(List<ModuleDetails> moduleDetails);
+
+    //添加这条工序所需的物料、(重新设计)
+    boolean insnewprocess(List<ModuleDetails> moduleDetails);
+
+    //根据物料查询出组成商品的物料（重新设计）
+    List<ModuleDetails> selnewprocessById(String id);
+
 }

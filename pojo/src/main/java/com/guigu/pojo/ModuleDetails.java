@@ -1,6 +1,7 @@
 package com.guigu.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.guigu.dto.ModuleDto;
@@ -35,4 +36,13 @@ public class ModuleDetails  {
     private Float costPrice;
 
     private Float subtotal;
+
+    @TableField(exist = false)
+    public Float amount1;
+
+    @TableField(exist = false)
+    public Integer parintid;
+
+    @TableField(exist = false)
+    public Float subtotal1;
 }

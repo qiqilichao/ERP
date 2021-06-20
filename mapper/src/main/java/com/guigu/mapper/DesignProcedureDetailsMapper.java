@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.guigu.pojo.DesignProcedureDetails;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -17,4 +18,7 @@ public interface DesignProcedureDetailsMapper extends BaseMapper<DesignProcedure
             "\n" +
             "WHERE df.`PRODUCT_ID`= #{productId} ;")
     List<DesignProcedureDetails> selectByproduct_id(String productId);
+
+    @Update("UPDATE `m_design_procedure_details` SET DESIGN_MODULE_TAG = 'D002-1' WHERE id=#{ids}")
+    boolean upddesprodetatag(Integer ids);
 }

@@ -1,6 +1,7 @@
 package com.guigu.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -31,5 +32,13 @@ public class DesignProcedureModule {
     private Float costPrice;
 
     private Float subtotal;
+
+//    查询出全部的可用数量
+    @TableField(exist = false)
+    private Integer residualAmount;
+
+    //    查询出全部的可用数量
+    @TableField(exist = false)
+    private Integer amount1;
 
 }

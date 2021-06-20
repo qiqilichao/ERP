@@ -57,6 +57,8 @@ public class DfileController {
         dfile.setDesignModuleTag("W001-0");
         dfile.setDesignProcedureTag("G001-0");
         dfile.setDesignCellTag("K001-0");
+        String productIds = "100"+dfile.getFirstKindId()+dfile.getSecondKindId()+dfile.getThirdKindId()+idUtil.ProductId(list.get(list.size() - 1));
+        dfile.setProductId(productIds);
         String pId = "100"+dfile.getFirstKindId()+dfile.getSecondKindId()+dfile.getThirdKindId()+idUtil.ProductId(list.get(list.size() - 1));
         dfile.setProductId(pId);
         return dfileService.save(dfile);

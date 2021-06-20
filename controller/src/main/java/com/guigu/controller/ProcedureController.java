@@ -163,7 +163,32 @@ public class ProcedureController {
      */
     @RequestMapping("selprocessById")
     public List<ModuleDetails> selprocessById(String proid){
-        System.out.println(proid);
         return procedureService.selprocessById(proid);
+    }
+
+    /**
+     * 根据物料查询出组成商品的物料
+     * @param proid
+     * @return
+     */
+    @RequestMapping("selnewprocessById")
+    public List<ModuleDetails> selnewprocessById(String proid){
+        return procedureService.selnewprocessById(proid);
+    }
+
+    /**
+     * 添加这条工序所需的物料
+     */
+    @RequestMapping("insprocess")
+    public boolean insprocess(@RequestBody List<ModuleDetails> moduleDetails){
+        return procedureService.insprocess(moduleDetails);
+    }
+
+    /**
+     * 重新设计添加这条工序所需的物料
+     */
+    @RequestMapping("insnewprocess")
+    public boolean insnewprocess(@RequestBody List<ModuleDetails> moduleDetails){
+        return procedureService.insnewprocess(moduleDetails);
     }
 }
