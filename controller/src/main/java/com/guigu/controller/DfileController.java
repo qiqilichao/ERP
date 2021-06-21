@@ -57,8 +57,6 @@ public class DfileController {
         dfile.setDesignModuleTag("W001-0");
         dfile.setDesignProcedureTag("G001-0");
         dfile.setDesignCellTag("K001-0");
-        String productIds = "100"+dfile.getFirstKindId()+dfile.getSecondKindId()+dfile.getThirdKindId()+idUtil.ProductId(list.get(list.size() - 1));
-        dfile.setProductId(productIds);
         String pId = "100"+dfile.getFirstKindId()+dfile.getSecondKindId()+dfile.getThirdKindId()+idUtil.ProductId(list.get(list.size() - 1));
         dfile.setProductId(pId);
         return dfileService.save(dfile);
@@ -137,5 +135,49 @@ public class DfileController {
         dfile.setCheckTag("S001-2");
         boolean b = dfileService.updateById(dfile);
         return b;
+    }
+    //修改数据
+    @RequestMapping("/modifythe.action")
+    public boolean modifythe(Dfile dfile){
+        System.out.println(dfile);
+        dfile.setCheckTag("S001-0");
+        boolean b = dfileService.updateById(dfile);
+        return b;
+    }
+    //删除数据（未删除）
+    @RequestMapping("/modifydel.action")
+    public boolean modifydel(Dfile dfile){
+
+        dfile.setDeleteTag("C001-1");
+        dfile.setCheckTag("S001-0");
+        boolean updateById = dfileService.updateById(dfile);
+        return updateById;
+    }
+    //审核已删除的数据
+    @RequestMapping("/approveddel.action")
+    public IPage<Dfile> approveddel(@RequestParam(value = "pageno", defaultValue = "1") int pageno,
+                                 @RequestParam(value = "pagesize", defaultValue = "5") int pagesize,
+                                 Dfile dfile){
+        QueryWrapper<Dfile> queryWrapper = new QueryWrapper<Dfile>();
+        if(!StringUtils.isEmpty(dfile.getProductName())){
+            queryWrapper.like("PRODUCT_NAME",dfile.getProductName());
+        }
+        queryWrapper.eq("CHECK_TAG", "S001-0");
+        queryWrapper.eq("DELETE_TAG","C001-1");
+
+        return dfileService.page(new Page<Dfile>(pageno, pagesize), queryWrapper);
+    }
+    //恢复删除数据（已删除）
+    @RequestMapping("/recoverdeleted.action")
+    public boolean recoverdeleted(Dfile dfile){
+
+        dfile.setDeleteTag("C001-0");
+        boolean updateById = dfileService.updateById(dfile);
+        return updateById;
+    }
+    //产品档案永久删除
+    @RequestMapping("/permanentlydelete.action")
+    public boolean permanentlydelete(int id){
+        return dfileService.removeById(id);
     }
 }
