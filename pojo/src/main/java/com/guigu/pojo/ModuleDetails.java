@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.guigu.dto.ModuleDetailDto;
 import com.guigu.dto.ModuleDto;
 import lombok.Data;
 
@@ -11,7 +12,7 @@ import lombok.Data;
 
 @Data
 @TableName("d_module_details")
-public class ModuleDetails  {
+public class ModuleDetails  extends ModuleDetailDto {
     @TableId(type = IdType.AUTO)
     private Integer id;
 

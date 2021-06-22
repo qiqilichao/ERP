@@ -1,8 +1,10 @@
 package com.guigu.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.guigu.pojo.Module;
 import com.guigu.pojo.ModuleDetails;
 import com.guigu.service.ModuleDetailsService;
+import com.guigu.service.ModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,10 +23,18 @@ import java.util.List;
 public class ModuleDetailsController {
     @Autowired
     ModuleDetailsService moduleDetailsService;
+    @Autowired
+    ModuleService moduleService;
 
-    @RequestMapping("/moduleDetailadd.action")
-    public String modulesave(){
-        return " ";
+    @RequestMapping("/moduleDetailByid.action")
+    public List<ModuleDetails> modulesave(int id){
+        System.out.println(id);
+        QueryWrapper<ModuleDetails> queryWrapper = new QueryWrapper<ModuleDetails>();
+
+        queryWrapper.eq("PARENT_ID",id);
+        List<ModuleDetails> list = moduleDetailsService.list(queryWrapper);
+        System.out.println(list);
+        return list;
 
     }
 }
