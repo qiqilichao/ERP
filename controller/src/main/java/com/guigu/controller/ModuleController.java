@@ -81,5 +81,13 @@ public class ModuleController {
 
         return moduleService.page(new Page<Module>(pageno, pagesize), null);
     }
-    //设计单查询方法
+    //设计单变更
+    @RequestMapping("/xinmoduleupdate.action")
+    public boolean xinmoduleupdate(Module module){
+        module.setChangeTime(new Date());
+        module.setCheckTag("S001-0");
+        module.setChangeTag("B002-0");
+        boolean b = moduleService.updateById(module);
+        return b;
+    }
 }

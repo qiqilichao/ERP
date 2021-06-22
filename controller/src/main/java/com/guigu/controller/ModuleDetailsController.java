@@ -25,7 +25,7 @@ public class ModuleDetailsController {
     ModuleDetailsService moduleDetailsService;
     @Autowired
     ModuleService moduleService;
-
+    //查询单个商品的所以物料
     @RequestMapping("/moduleDetailByid.action")
     public List<ModuleDetails> modulesave(int id){
         System.out.println(id);
@@ -35,6 +35,17 @@ public class ModuleDetailsController {
         List<ModuleDetails> list = moduleDetailsService.list(queryWrapper);
         System.out.println(list);
         return list;
-
+    }
+    //删除商品的物料
+    @RequestMapping("/moduleDetailDelect.action")
+    public boolean moduleDetailDelect(int id){
+        boolean b = moduleDetailsService.removeById(id);
+        return b;
+    }
+    //修改商品的物料
+    @RequestMapping("/moduleDetailsadd.action")
+    public boolean  moduleDetailsadd(@RequestBody List<ModuleDetails> moduleDetails){
+        boolean gobuy = moduleDetailsService.gobuy(moduleDetails);
+        return gobuy;
     }
 }
