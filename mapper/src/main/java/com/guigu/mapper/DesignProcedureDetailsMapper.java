@@ -1,8 +1,11 @@
 package com.guigu.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.guigu.pojo.DesignProcedure;
 import com.guigu.pojo.DesignProcedureDetails;
+import com.guigu.pojo.DesignProcedureModule;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
@@ -18,6 +21,15 @@ public interface DesignProcedureDetailsMapper extends BaseMapper<DesignProcedure
             "\n" +
             "WHERE df.`PRODUCT_ID`= #{productId} ;")
     List<DesignProcedureDetails> selectByproduct_id(String productId);
+
+    @Select("SELECT * FROM `m_design_procedure` dp INNER JOIN \n" +
+            "`m_design_procedure_details` dpd  ON dp.`ID`=dpd.`PARENT_ID`\n" +
+            "WHERE  dp.`PRODUCT_ID`=#{id}")
+    List<DesignProcedureDetails> seletWrapper(String id);
+
+
+
+
 
     @Update("UPDATE `m_design_procedure_details` SET DESIGN_MODULE_TAG = 'D002-1' WHERE id=#{ids}")
     boolean upddesprodetatag(Integer ids);

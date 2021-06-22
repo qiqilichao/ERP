@@ -10,7 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 @Data
-@TableName("s_pay")
+@TableName("S_PAY")
 public class Pay {
     @TableId(type = IdType.AUTO)
     private Integer id;

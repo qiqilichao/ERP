@@ -25,6 +25,12 @@ public class DesignProcedureDetailsServiceImpl extends ServiceImpl<DesignProcedu
     }
 
     @Override
+    public List<DesignProcedureDetails> queryWrapper(String id) {
+
+        return designProcedureDetailsMapper.seletWrapper(id);
+    }
+
+    @Override
     public List<DesignProcedureDetails> listBypid(String productId) {
         return  designProcedureDetailsMapper.selectByproduct_id(productId);
     }

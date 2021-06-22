@@ -1,5 +1,8 @@
 package com.guigu.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.guigu.mapper.ManufactureMapper;
 import com.guigu.pojo.*;
@@ -7,9 +10,12 @@ import com.guigu.service.*;
 import com.guigu.util.IdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.beans.Transient;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -22,6 +28,8 @@ public class ManufactureServiceImpl extends ServiceImpl<ManufactureMapper,Manufa
     @Autowired
     private DesignProcedureModuleService designProcedureModuleService;
 
+    @Autowired
+    private DesignProcedureService designProcedureService;
 
     @Autowired
     private ApplyService applyService;
@@ -33,8 +41,20 @@ public class ManufactureServiceImpl extends ServiceImpl<ManufactureMapper,Manufa
     @Autowired
     private ProcedureModuleService procedureModuleService;
 
+
+    @Autowired
+    private ManufactureMapper manufactureMapper;
+
+
+    @Autowired
+    private  PayService payService;
+
+    @Autowired
+    private  PayDetailsService payDetailsService;
+
     @Override
     @Transient
+    //插入生产总表的
     public boolean addManufacture(Manufacture manufacture) {
 
         //提交生产总表前修改生产计划派工标志
@@ -52,6 +72,12 @@ public class ManufactureServiceImpl extends ServiceImpl<ManufactureMapper,Manufa
         }else{
             manufacture.setManufactureId(IdUtil.manufactureId(list.get(list.size()-1)));
         }
+
+        QueryWrapper<DesignProcedure> wrapper = new QueryWrapper<>();
+        wrapper.eq("PRODUCT_ID",manufacture.getProductId());
+        DesignProcedure one = designProcedureService.getOne(wrapper);
+        manufacture.setModuleCostPriceSum(one.getCostPriceSum());
+        manufacture.setLabourCostPriceSum(one.getModuleCostPriceSum());
         manufacture.setCheckTag("S001-0");
         manufacture.setManufactureProcedureTag("S002-0");
         boolean save = this.save(manufacture);
@@ -105,8 +131,91 @@ public class ManufactureServiceImpl extends ServiceImpl<ManufactureMapper,Manufa
         }
         boolean saveBatch = procedureModuleService.saveBatch(modules);
 
-        if(save&&bool==details.size()&&saveBatch)
+        if(save&&bool==details.size()&&saveBatch&&b)
             return true;
         return false;
     }
+
+    @Override
+    //查询所有的能审核派工单的
+    public IPage<Manufacture> manufacturelist(int pageno ,int pagesize,Manufacture manufacture) {
+        QueryWrapper<Manufacture> wrapper=new QueryWrapper();
+        wrapper.eq("CHECK_TAG","S001-0");
+        wrapper.eq("MANUFACTURE_PROCEDURE_TAG","S002-0");
+        return this.page(new Page<Manufacture>(pageno,pagesize),wrapper);
+    }
+
+    @Override
+    @Transactional
+    //审核派工单
+    public boolean SubmitforReview(Manufacture manufacture) {
+
+
+        int i = manufactureMapper.updateTeg(manufacture);
+        boolean j=false;
+        boolean m=false;
+        try {
+
+        QueryWrapper<Procedure> wrapper = new QueryWrapper<>();
+        wrapper.eq("PARENT_ID",manufacture.getId());
+        List<Procedure> procedures = procedureService.list(wrapper);
+
+
+        for (Procedure p:procedures) {
+            List<Pay> list = payService.list();
+            Pay pay = new Pay();
+            if (list.size() == 0) {
+                Date dt=new Date();
+                SimpleDateFormat matter1=new SimpleDateFormat("yyyyMMdd");
+                String date =  matter1.format(dt);
+                pay.setPayId("401"+date+"0001");
+            } else {
+                pay.setPayId(IdUtil.PayId(list.get(list.size() - 1)));
+            }
+            pay.setReason("C002-1");
+            pay.setChecker(manufacture.getChecker());
+            pay.setReasonexact(manufacture.getManufactureId() + p.getProcedureName());
+            pay.setAmountSum(p.getDemandAmount());
+            pay.setCostPriceSum(p.getModuleSubtotal());
+            pay.setRegister(manufacture.getChecker());
+            pay.setRegisterTime(new Date());
+            pay.setPaidAmountSum(0f);
+            pay.setCheckTag("S001-1");
+            pay.setPayTag("K002-1");
+
+            j = this.payService.save(pay);
+
+
+            QueryWrapper<ProcedureModule> wrapper1 = new QueryWrapper<>();
+            wrapper1.eq("PARENT_ID", p.getId());
+            //System.out.println("---------------------"+p.getId());
+            List<ProcedureModule> list1 = this.procedureModuleService.list(wrapper1);
+            List<PayDetails> payDetailsList=new ArrayList<>();
+
+            for (ProcedureModule pm : list1) {
+                PayDetails payDetails = new PayDetails();
+                payDetails.setParentId(pay.getId());
+                payDetails.setProductId(manufacture.getProductId());
+                payDetails.setProductName(manufacture.getProductName());
+                payDetails.setProductDescribe(manufacture.getProductDescribe());
+                payDetails.setAmount(pm.getAmount());
+                payDetails.setCostPrice(pm.getCostPrice());
+                payDetails.setSubtotal(pm.getSubtotal());
+                payDetails.setPaidAmount(0);
+                payDetails.setPayTag("K002-1");
+                //payDetailsList.add(payDetails);
+                m = this.payDetailsService.save(payDetails);
+
+            }
+           // m = this.payDetailsService.saveBatch(payDetailsList);
+        }
+        }catch (Exception e){
+           return  false;
+        }
+        if(i>0&&j&&m)
+            return true;
+        return false;
+    }
+
+
 }

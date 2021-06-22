@@ -116,7 +116,7 @@ public class IdUtil {
     }
 
     //出库单编号
-    public String PayId(Pay pay){
+    public static String PayId(Pay pay){
         //获取当前时间
         Date dt=new Date();
         SimpleDateFormat matter1=new SimpleDateFormat("yyyyMMdd");
