@@ -55,4 +55,13 @@ public class ManufactureController {
 
         return manufactureService.SubmitforReview(manufacture);
     }
+
+    //分页查询生产派工单查询
+    @RequestMapping("manufactureIPage")
+    @ResponseBody
+    public IPage<Manufacture> manufactureIPage( @RequestParam(defaultValue = "1") Integer pageno,
+                                                @RequestParam(defaultValue = "10") Integer pagesize,
+                                                Manufacture manufacture){
+        return manufactureService.queryallManufacture(pageno,pagesize,manufacture);
+    }
 }

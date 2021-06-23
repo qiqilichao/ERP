@@ -17,5 +17,8 @@ public interface ManufactureService extends IService<Manufacture> {
     //改变审核状态
     boolean SubmitforReview(Manufacture manufacture);
 
+    //生产派工单审核查询
+    IPage<Manufacture>  queryallManufacture(int pageno,int pagesize,Manufacture manufacture);
+
 
 }

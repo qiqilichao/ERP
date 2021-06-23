@@ -14,14 +14,13 @@ import java.util.Date;
 public class Users {
     @TableId(type = IdType.AUTO)
     private Integer id;
-    @TableField("login_id")
+    @TableField("LOGIN_ID")
     private String loginId;
-    @TableField("password")
+    @TableField("PASSWORD")
     private String password;
-    @TableField("photo_path")
+    @TableField("PHOTO_PATH")
     private String photo;
+    @TableField("STATUS")
     private Integer status;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    @TableField("creationDate")
-    private Date creationDate;
+
 }

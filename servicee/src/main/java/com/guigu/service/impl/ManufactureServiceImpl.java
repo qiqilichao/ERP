@@ -2,6 +2,7 @@ package com.guigu.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.guigu.mapper.ManufactureMapper;
@@ -150,6 +151,9 @@ public class ManufactureServiceImpl extends ServiceImpl<ManufactureMapper,Manufa
     //审核派工单
     public boolean SubmitforReview(Manufacture manufacture) {
 
+        if(!"S001-1".equals(manufacture.getCheckTag())){
+             return false;
+        }
 
         int i = manufactureMapper.updateTeg(manufacture);
         boolean j=false;
@@ -215,6 +219,23 @@ public class ManufactureServiceImpl extends ServiceImpl<ManufactureMapper,Manufa
         if(i>0&&j&&m)
             return true;
         return false;
+    }
+
+    //生产派工单审核查询
+    @Override
+    public IPage<Manufacture>  queryallManufacture(int pageno, int pagesize, Manufacture manufacture) {
+
+        QueryWrapper<Manufacture> wrapper=new QueryWrapper();
+        if(!"-1".equals(manufacture.getCheckTag())){
+            wrapper.eq("CHECK_TAG",manufacture.getCheckTag());
+        }
+        if(!StringUtils.isEmpty(manufacture.getManufactureId())){
+            wrapper.eq("MANUFACTURE_ID",manufacture.getManufactureId());
+        }
+        if(!StringUtils.isEmpty(manufacture.getProductName())){
+           wrapper.like("PRODUCT_NAME",manufacture.getProductName());
+        }
+        return this.page(new Page<Manufacture>(pageno,pagesize),wrapper);
     }
 
 
