@@ -30,7 +30,7 @@ public class GatherController {
                                       @RequestParam(value = "pagesize",defaultValue = "5")Integer pagesize){
         QueryWrapper<Gather> gatherQueryWrapper = new QueryWrapper<>();
         gatherQueryWrapper.eq("CHECK_TAG","S001-1");
-        gatherQueryWrapper.eq("STORE_TAG","K002-1");
+        gatherQueryWrapper.eq("GATHER_TAG","K002-1");
         IPage<Gather> page = gatherService.page(new Page<Gather>(pageno, pagesize), gatherQueryWrapper);
         return page;
     }

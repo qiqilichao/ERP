@@ -68,10 +68,8 @@ public class ModuleServiceImpl extends ServiceImpl<ModuleMapper, Module> impleme
         Module module3 = new Module();
          ModuleDetails moduleDetails = new ModuleDetails();
         int i=0;
-        Float hh=0F;
         for (Module module2 : module) {
              Float subtotal = module2.getSubtotal();
-             hh+=subtotal;
             i+=1;
             if(i==1){
 
@@ -88,9 +86,19 @@ public class ModuleServiceImpl extends ServiceImpl<ModuleMapper, Module> impleme
                 module3.setCheckTag("S001-0");
                 module3.setRegisterTime(new Date());
                 module3.setChangeTag("B002-0");
+                module3.setFirstKindId(module2.getFirstKindId());
+                module3.setFirstKindName(module2.getFirstKindName());
+                module3.setSecondKindId(module2.getSecondKindId());
+                module3.setSecondKindName(module2.getSecondKindName());
+                module3.setThirdKindId(module2.getThirdKindId());
+                module3.setThirdKindName(module2.getThirdKindName());
+                module3.setDesigner(module2.getDesigner());
+                module3.setModuleDescribe(module2.getModuleDescribe());
+                module3.setRegister(module2.getRegister());
+                module3.setChecker(module2.getChecker());
+                module3.setCheckTime(module2.getCheckTime());
 
-
-                module3.setCostPriceSum(hh);
+                module3.setCostPriceSum(module2.getHh());
                  boolean save = moduleService.save(module3);
 
             }
@@ -99,6 +107,10 @@ public class ModuleServiceImpl extends ServiceImpl<ModuleMapper, Module> impleme
             moduleDetails.setDetailsNumber(module2.getId());
             moduleDetails.setProductId(module2.getProductId());
             moduleDetails.setAmount(module2.getAmount());
+            moduleDetails.setProductName(module2.getProductName());
+            moduleDetails.setType(module2.getType());
+            moduleDetails.setProductDescribe(module2.getModuleDescribe());
+            moduleDetails.setAmountUnit(module2.getAmountUnit());
             moduleDetails.setCostPrice(module2.getCostPrice());
             moduleDetails.setSubtotal(module2.getSubtotal());
             moduleDetails.setResidualAmount(module2.getResidualAmount());
