@@ -35,4 +35,6 @@ public class ModuleDto {
     private Float hh;
     @TableField(exist = false)
     private Integer did;
+    @TableField(exist = false)
+    private String personalUnit;
 }

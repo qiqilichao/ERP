@@ -110,10 +110,10 @@ public class ModuleServiceImpl extends ServiceImpl<ModuleMapper, Module> impleme
             moduleDetails.setProductName(module2.getProductName());
             moduleDetails.setType(module2.getType());
             moduleDetails.setProductDescribe(module2.getModuleDescribe());
-            moduleDetails.setAmountUnit(module2.getAmountUnit());
+            moduleDetails.setAmountUnit(module2.getPersonalUnit());
             moduleDetails.setCostPrice(module2.getCostPrice());
             moduleDetails.setSubtotal(module2.getSubtotal());
-            moduleDetails.setResidualAmount(module2.getResidualAmount());
+            moduleDetails.setResidualAmount(module2.getAmount());
             moduleDetailsService.save(moduleDetails);
 
             Integer did = module2.getDid();
