@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.*;
 
-import javax.rmi.CORBA.Util;
 import java.util.List;
 
 @RestController
@@ -179,5 +177,45 @@ public class DfileController {
     @RequestMapping("/permanentlydelete.action")
     public boolean permanentlydelete(int id){
         return dfileService.removeById(id);
+    }
+    /**cmf
+     * 查询单表格数据
+     * @param pageno
+     * @param pagesize
+     * @return
+     */
+    @RequestMapping("/queryAllDFile.action")
+    public IPage<Dfile> queryAllDFile(@RequestParam(value = "pageno",defaultValue = "1") int pageno,
+                                      @RequestParam(value = "pagesize",defaultValue = "10") int pagesize){
+
+        System.out.println(1213);
+        /*dfileService.queryAllDfile(pageno,pagesize,dfile);*/
+        IPage<Dfile> page = dfileService.page(new Page<Dfile>(pageno, pagesize));
+        System.out.println(page);
+        return page;
+    }
+
+
+    /**cmf
+     * 查询安全库存配置单的数据
+     * @param productId
+     * @return
+     */
+   @RequestMapping("/queryByIdDFile.May")
+    public List<Dfile> queryByIdDFile(String productId){
+        System.out.println("queryByIdDFile的productId"+productId);
+        return dfileService.queryByDfile2(productId);
+    }
+
+
+    /**cmf
+     * 查询表格数据
+     * @param productId
+     * @return
+     */
+    @RequestMapping("/queryByIdDFile2.May")
+    public List<Dfile> queryByIdDFile2(String productId){
+        System.out.println("queryByIdDFile2的productId"+productId);
+        return dfileService.queryByDfile2(productId);
     }
 }
