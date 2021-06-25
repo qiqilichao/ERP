@@ -7,7 +7,7 @@ import lombok.Data;
 
 
 @Data
-@TableName("s_gather_detail")
+@TableName("s_gather_details")
 public class GatherDetails {
     @TableId(type = IdType.AUTO)
     private Integer id;

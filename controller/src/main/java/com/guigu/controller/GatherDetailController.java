@@ -23,9 +23,11 @@ public class GatherDetailController {
     //查询订单里面的物料
     @RequestMapping("/gatherDetailByidList.action")
     public List<GatherDetails> gatherDetailByidList(int id){
+        System.out.println("123467iuo");
         QueryWrapper<GatherDetails> gatherDetailsQueryWrapper = new QueryWrapper<>();
         gatherDetailsQueryWrapper.eq("PARENT_ID",id);
         List<GatherDetails> list = gatherDetailService.list(gatherDetailsQueryWrapper);
+
         return list;
     }
 

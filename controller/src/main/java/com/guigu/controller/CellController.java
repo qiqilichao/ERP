@@ -26,4 +26,9 @@ public class CellController {
         Cell one = cellService.getOne(cellQueryWrapper);
         return one;
     }
+    @RequestMapping("/cellprodu.action")
+    public String cellprodu(){
+        System.out.println(324567890);
+        return " ";
+    }
 }
