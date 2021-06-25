@@ -88,8 +88,19 @@ public class DfileController {
        List<Dfile> list = dfileService.list(queryWrapper);
        return list;
     }
+    @RequestMapping("/cpapproved.action")
+    public IPage<Dfile> cpapproved(@RequestParam(value = "pageno", defaultValue = "1") int pageno,
+                                 @RequestParam(value = "pagesize", defaultValue = "5") int pagesize,
+                                 Dfile dfile){
+        QueryWrapper<Dfile> queryWrapper = new QueryWrapper<Dfile>();
+        if(!StringUtils.isEmpty(dfile.getProductName())){
+            queryWrapper.like("PRODUCT_NAME",dfile.getProductName());
+        }
+        queryWrapper.eq("TYPE", "Y001-1");
+        queryWrapper.eq("CHECK_TAG", "S001-1");
 
-
+        return dfileService.page(new Page<Dfile>(pageno, pagesize), queryWrapper);
+    }
     @RequestMapping("quertyBypid")
     @ResponseBody
     //wq查询产品是否完成所有设计
