@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.guigu.pojo.DesignProcedure;
 import com.guigu.pojo.DesignProcedureDetails;
+import org.apache.ibatis.annotations.Param;
 import com.guigu.pojo.DesignProcedureModule;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -33,4 +34,7 @@ public interface DesignProcedureDetailsMapper extends BaseMapper<DesignProcedure
 
     @Update("UPDATE `m_design_procedure_details` SET DESIGN_MODULE_TAG = 'D002-1' WHERE id=#{ids}")
     boolean upddesprodetatag(Integer ids);
+
+    @Update("UPDATE `m_design_procedure_details` SET MODULE_SUBTOTAL=#{subcos} where id=#{id}")
+    boolean updsubcost(@Param("subcos") float subcos, @Param("id") Integer id);
 }

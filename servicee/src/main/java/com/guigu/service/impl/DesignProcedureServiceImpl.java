@@ -43,6 +43,9 @@ public class DesignProcedureServiceImpl extends ServiceImpl<DesignProcedureMappe
     @Autowired
     DesignProcedureDetailsMapper designProcedureDetailsMapper;
 
+    @Autowired
+    DesignProcedureMapper designProcedureMapper;
+
     @Transactional
     @Override
     public boolean insdesignProceduure(List<ProcedureList> procedureLists) {
@@ -240,6 +243,7 @@ public class DesignProcedureServiceImpl extends ServiceImpl<DesignProcedureMappe
         List<DesignProcedureModule> list = new ArrayList<DesignProcedureModule>();
 
         int index=1;
+        float subcost=0;
         for (ModuleDetails m :moduleDetails){
             m.setResidualAmount((int) (m.getResidualAmount()-m.getAmount1()));
             DesignProcedureModule module = new DesignProcedureModule();
@@ -254,11 +258,14 @@ public class DesignProcedureServiceImpl extends ServiceImpl<DesignProcedureMappe
             module.setAmountUnit(m.getAmountUnit());
             module.setCostPrice(m.getCostPrice());
             module.setSubtotal(m.getSubtotal1());
+            subcost+=module.getSubtotal();
             list.add(module);
         }
+
         boolean b = designProcedureModuleService.saveBatch(list);
         boolean b1 = moduleDetailsService.updateBatchById(moduleDetails);
-        if (upddesprodetatag && b && b1){
+        boolean updsubcost = designProcedureDetailsMapper.updsubcost(subcost, list.get(0).getParentId());
+        if (updsubcost && upddesprodetatag && b && b1){
             return true;
         }
         return false;
@@ -272,9 +279,7 @@ public class DesignProcedureServiceImpl extends ServiceImpl<DesignProcedureMappe
 
         int index=0;
         for (ModuleDetails m :moduleDetails){
-//            list1.get(index).setAmount(Float.valueOf(m.getAmount1()));
             list1.get(index).setResidualAmount(m.getResidualAmount());
-//            list1.get(index).setAmount1(m.getAmount());
             index++;
         }
         boolean b = designProcedureModuleService.updateBatchById(list1);
@@ -285,6 +290,7 @@ public class DesignProcedureServiceImpl extends ServiceImpl<DesignProcedureMappe
         return false;
     }
 
+    @Transactional
     @Override
     public List<ModuleDetails> selnewprocessById(String id) {
         //查询出物料组成表中的数据
@@ -312,4 +318,138 @@ public class DesignProcedureServiceImpl extends ServiceImpl<DesignProcedureMappe
 
         return moduleDetails;
     }
+
+    @Override
+    public boolean processSubmit(Integer id) {
+        //查询出这条设计单
+        DesignProcedure byId = this.getById(id);
+        //查询到设计单的工序物料
+        QueryWrapper<DesignProcedureDetails> wrapper = new QueryWrapper<DesignProcedureDetails>();
+        wrapper.eq("PARENT_ID",byId.getId());
+        List<DesignProcedureDetails> list = designProcedureDetailsService.list(wrapper);
+        float cos = 0;
+        for (DesignProcedureDetails d : list){
+            cos+=d.getModuleSubtotal();
+        }
+        
+        //修改这条设计单的物料总成本
+        byId.setModuleCostPriceSum(cos);
+        boolean b = this.updateById(byId);
+        boolean b1 = designProcedureMapper.processSubmit(id);
+        if (b && b1){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public IPage<DesignProcedure> selrocesslistok(Integer pageno, Integer pagesize) {
+        QueryWrapper<DesignProcedure> wrapper = new QueryWrapper<DesignProcedure>();
+        wrapper.eq("CHECK_TAG", "S001-0");
+        wrapper.eq("DESIGN_MODULE_TAG", "G002-1");
+        return this.page(new Page<DesignProcedure>(pageno, pagesize), wrapper);
+    }
+
+    @Override
+    public List<DesignProcedureModule> getprocesslist(Integer id) {
+        QueryWrapper<DesignProcedureModule> wrapper = new QueryWrapper<DesignProcedureModule>();
+        wrapper.eq("PARENT_ID",id);
+        return designProcedureModuleService.list(wrapper);
+    }
+
+    @Override
+    public boolean processtoexamineok(DesignProcedure designProcedure, Integer radio) {
+        if (radio==2){
+            designProcedure.setDesignModuleTag("G002-2");
+            designProcedure.setCheckTag("S001-1");
+        }else{
+            designProcedure.setCheckTag("S001-2");
+        }
+        return this.updateById(designProcedure);
+    }
+
+    @Override
+    public IPage<DesignProcedure> queryProcess(Integer pageno, Integer pagesize, DesignProcedure designProcedure) {
+        QueryWrapper<DesignProcedure> wrapper = new QueryWrapper<DesignProcedure>();
+        if (!StringUtils.isEmpty(designProcedure)) {
+            if (!StringUtils.isEmpty(designProcedure.getFirstKindId())) {
+                wrapper.eq("FIRST_KIND_ID", designProcedure.getFirstKindId());
+            }
+            if (!StringUtils.isEmpty(designProcedure.getSecondKindId())) {
+                wrapper.eq("SECOND_KIND_ID", designProcedure.getSecondKindId());
+            }
+            if (!StringUtils.isEmpty(designProcedure.getThirdKindId())) {
+                wrapper.eq("THIRD_KIND_ID", designProcedure.getThirdKindId());
+            }
+            if (!StringUtils.isEmpty(designProcedure.getDate1())) {
+                wrapper.ge("REGISTER_TIME", designProcedure.getDate1());
+            }
+            if (!StringUtils.isEmpty(designProcedure.getDate2())) {
+                wrapper.le("REGISTER_TIME", designProcedure.getDate2());
+            }
+        }
+        return this.page(new Page<DesignProcedure>(pageno,pagesize),wrapper);
+    }
+
+    @Override
+    public IPage<DesignProcedure> queryProcesstoexmainOk(Integer pageno, Integer pagesize, DesignProcedure designProcedure) {
+        QueryWrapper<DesignProcedure> wrapper = new QueryWrapper<DesignProcedure>();
+        wrapper.eq("CHECK_TAG","S001-1");
+        wrapper.eq("DESIGN_MODULE_TAG","G002-2");
+        if (!StringUtils.isEmpty(designProcedure)) {
+            if (!StringUtils.isEmpty(designProcedure.getFirstKindId())) {
+                wrapper.eq("FIRST_KIND_ID", designProcedure.getFirstKindId());
+            }
+            if (!StringUtils.isEmpty(designProcedure.getSecondKindId())) {
+                wrapper.eq("SECOND_KIND_ID", designProcedure.getSecondKindId());
+            }
+            if (!StringUtils.isEmpty(designProcedure.getThirdKindId())) {
+                wrapper.eq("THIRD_KIND_ID", designProcedure.getThirdKindId());
+            }
+            if (!StringUtils.isEmpty(designProcedure.getDate1())) {
+                wrapper.ge("REGISTER_TIME", designProcedure.getDate1());
+            }
+            if (!StringUtils.isEmpty(designProcedure.getDate2())) {
+                wrapper.le("REGISTER_TIME", designProcedure.getDate2());
+            }
+        }
+        return this.page(new Page<DesignProcedure>(pageno,pagesize),wrapper);
+    }
+
+    @Override
+    public boolean insnewpressdespro(List<ModuleDetails> moduleDetails) {
+        String register = moduleDetails.get(0).getRegister();
+        Integer parintid = moduleDetails.get(0).getParintid();
+        DesignProcedureDetails byId = designProcedureDetailsService.getById(parintid);
+        byId.setRegister(register);
+        byId.setRegisterTime(new Date());
+        byId.setDesignModuleChangeTag("D003-1");
+        designProcedureDetailsService.updateById(byId);
+        if (!StringUtils.isEmpty(moduleDetails.get(0).getId())){
+            this.insprocess(moduleDetails);
+        }
+        return true;
+    }
+
+    @Transactional
+    @Override
+    public boolean updprocessdespro(Integer id) {
+        QueryWrapper<DesignProcedureDetails> wrapper = new QueryWrapper<DesignProcedureDetails>();
+        wrapper.eq("PARENT_ID",id);
+        List<DesignProcedureDetails> list = designProcedureDetailsService.list(wrapper);
+        for (DesignProcedureDetails m : list){
+            m.setDesignModuleChangeTag("D003-0");
+        }
+        boolean b=designProcedureDetailsService.updateBatchById(list);
+        DesignProcedure procedure = this.getById(id);
+        procedure.setCheckTag("S001-0");
+        procedure.setDesignModuleTag("G002-1");
+        boolean b1 = this.updateById(procedure);
+        if (b && b1){
+            return true;
+        }
+        return false;
+    }
+
+
 }

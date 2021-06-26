@@ -40,6 +40,7 @@ public class ModuleServiceImpl extends ServiceImpl<ModuleMapper, Module> impleme
         wrapper.eq("CHECK_TAG","S001-1");
         wrapper.eq("TYPE","Y001-1");
         wrapper.eq("DESIGN_PROCEDURE_TAG","G001-0");
+        wrapper.eq("DESIGN_MODULE_TAG","W001-1");
         if (!StringUtils.isEmpty(module)){
             if (!StringUtils.isEmpty(module.getFirstKindId())) {
                 wrapper.eq("FIRST_KIND_ID", module.getFirstKindId());

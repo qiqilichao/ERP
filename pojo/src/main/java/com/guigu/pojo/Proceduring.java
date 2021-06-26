@@ -1,9 +1,19 @@
 package com.guigu.pojo;
 
-import java.math.BigDecimal;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
+@Data
+@TableName("m_proceduring")
 public class Proceduring {
+    @TableId(type = IdType.AUTO)
     private Integer id;
 
     private Integer parentId;
@@ -14,143 +24,28 @@ public class Proceduring {
 
     private String procedureName;
 
-    private BigDecimal labourHourAmount;
+    @TableField("labour_hour_amount")
+    private Float labourHourAmount1;
 
-    private BigDecimal costPrice;
+    private Float costPrice;
 
-    private BigDecimal subtotal;
+    private Float subtotal;
 
     private String procedureDescribe;
 
-    private BigDecimal regCount;
+    private Float regCount;
 
     private String procedureResponsiblePerson;
 
     private String register;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date registerTime;
 
     private String checker;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date checkTime;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
-    }
-
-    public Integer getDetailsNumber() {
-        return detailsNumber;
-    }
-
-    public void setDetailsNumber(Integer detailsNumber) {
-        this.detailsNumber = detailsNumber;
-    }
-
-    public String getProcedureId() {
-        return procedureId;
-    }
-
-    public void setProcedureId(String procedureId) {
-        this.procedureId = procedureId == null ? null : procedureId.trim();
-    }
-
-    public String getProcedureName() {
-        return procedureName;
-    }
-
-    public void setProcedureName(String procedureName) {
-        this.procedureName = procedureName == null ? null : procedureName.trim();
-    }
-
-    public BigDecimal getLabourHourAmount() {
-        return labourHourAmount;
-    }
-
-    public void setLabourHourAmount(BigDecimal labourHourAmount) {
-        this.labourHourAmount = labourHourAmount;
-    }
-
-    public BigDecimal getCostPrice() {
-        return costPrice;
-    }
-
-    public void setCostPrice(BigDecimal costPrice) {
-        this.costPrice = costPrice;
-    }
-
-    public BigDecimal getSubtotal() {
-        return subtotal;
-    }
-
-    public void setSubtotal(BigDecimal subtotal) {
-        this.subtotal = subtotal;
-    }
-
-    public String getProcedureDescribe() {
-        return procedureDescribe;
-    }
-
-    public void setProcedureDescribe(String procedureDescribe) {
-        this.procedureDescribe = procedureDescribe == null ? null : procedureDescribe.trim();
-    }
-
-    public BigDecimal getRegCount() {
-        return regCount;
-    }
-
-    public void setRegCount(BigDecimal regCount) {
-        this.regCount = regCount;
-    }
-
-    public String getProcedureResponsiblePerson() {
-        return procedureResponsiblePerson;
-    }
-
-    public void setProcedureResponsiblePerson(String procedureResponsiblePerson) {
-        this.procedureResponsiblePerson = procedureResponsiblePerson == null ? null : procedureResponsiblePerson.trim();
-    }
-
-    public String getRegister() {
-        return register;
-    }
-
-    public void setRegister(String register) {
-        this.register = register == null ? null : register.trim();
-    }
-
-    public Date getRegisterTime() {
-        return registerTime;
-    }
-
-    public void setRegisterTime(Date registerTime) {
-        this.registerTime = registerTime;
-    }
-
-    public String getChecker() {
-        return checker;
-    }
-
-    public void setChecker(String checker) {
-        this.checker = checker == null ? null : checker.trim();
-    }
-
-    public Date getCheckTime() {
-        return checkTime;
-    }
-
-    public void setCheckTime(Date checkTime) {
-        this.checkTime = checkTime;
-    }
 }

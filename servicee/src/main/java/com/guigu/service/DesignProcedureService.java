@@ -1,6 +1,5 @@
 package com.guigu.service;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.guigu.pojo.DesignProcedure;
@@ -43,5 +42,29 @@ public interface DesignProcedureService extends IService<DesignProcedure> {
 
     //根据物料查询出组成商品的物料（重新设计）
     List<ModuleDetails> selnewprocessById(String id);
+
+    //提交设计完成的工序物料
+    boolean processSubmit(Integer id);
+
+    //查询出已经完成工序物料设计的设计单
+    IPage<DesignProcedure> selrocesslistok(Integer pageno, Integer pagesize);
+
+    //获取到当前工序的物料组成
+    List<DesignProcedureModule> getprocesslist(Integer id);
+
+    //审核
+    boolean processtoexamineok(DesignProcedure designProcedure,Integer radio);
+
+    //查询出全部的设计单
+    IPage<DesignProcedure> queryProcess(Integer pageno,Integer pagesize,DesignProcedure designProcedure);
+
+    //查询出审核通过的数据
+    IPage<DesignProcedure> queryProcesstoexmainOk(Integer pageno,Integer pagesize,DesignProcedure designProcedure);
+
+   //这是更改物料提交的方法
+    boolean insnewpressdespro(List<ModuleDetails> moduleDetails);
+
+    //工序物料更改
+    boolean updprocessdespro(Integer id);
 
 }

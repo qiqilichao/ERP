@@ -3,7 +3,6 @@ package com.guigu.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.github.pagehelper.PageInfo;
 import com.guigu.pojo.*;
 import com.guigu.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +56,6 @@ public class ProcedureController {
      */
     @RequestMapping("tjgx")
     public boolean thgx(@RequestBody List<ProcedureList> procedureLists){
-        System.out.println(procedureLists);
         return procedureService.insdesignProceduure(procedureLists);
     }
 
@@ -150,8 +148,6 @@ public class ProcedureController {
     @RequestMapping("selrocesslist")
     public IPage<DesignProcedure> selrocesslist(@RequestParam(value = "pageno",defaultValue ="1") Integer pageno,
                                                @RequestParam(value = "pagesize",defaultValue ="5")Integer pagesize){
-
-
         return procedureService.selrocesslist(pageno,pagesize);
     }
 
@@ -190,5 +186,95 @@ public class ProcedureController {
     @RequestMapping("insnewprocess")
     public boolean insnewprocess(@RequestBody List<ModuleDetails> moduleDetails){
         return procedureService.insnewprocess(moduleDetails);
+    }
+
+    /**
+     * 提交设计完成的工序物料
+     * @param id
+     * @return
+     */
+    @RequestMapping("processSubmit")
+    public boolean processSubmit(Integer id){
+        return procedureService.processSubmit(id);
+    }
+
+    /**
+     * 查询出通过审核的设计单，并且工序物料已经设计的数据
+     * @param pageno
+     * @param pagesize
+     * @return
+     */
+    @RequestMapping("selrocesslistok")
+    public IPage<DesignProcedure> selrocesslistok(@RequestParam(value = "pageno",defaultValue ="1") Integer pageno,
+                                                @RequestParam(value = "pagesize",defaultValue ="5")Integer pagesize){
+        return procedureService.selrocesslistok(pageno,pagesize);
+    }
+
+    /**
+     *获取到当前工序的物料组成
+     * @param id
+     * @return
+     */
+    @RequestMapping("getprocesslist")
+    public List<DesignProcedureModule> getprocesslist(Integer id){
+
+        return procedureService.getprocesslist(id);
+    }
+
+    /**
+     * 审核
+     * @param designProcedure
+     * @param radio
+     * @return
+     */
+    @RequestMapping("processtoexamineok")
+    public boolean processtoexamineok(DesignProcedure designProcedure,Integer radio){
+
+        return procedureService.processtoexamineok(designProcedure,radio);
+    }
+
+    /**
+     * 查询出全部的设计单
+     * @param pageno
+     * @param pagesize
+     * @param designProcedure
+     * @return
+     */
+    @RequestMapping("queryProcess")
+    public IPage<DesignProcedure> queryProcess(@RequestParam(value = "pageno",defaultValue ="1") Integer pageno,
+                                               @RequestParam(value = "pagesize",defaultValue ="5")Integer pagesize,
+                                               DesignProcedure designProcedure){
+        return procedureService.queryProcess(pageno,pagesize,designProcedure);
+    }
+
+    /**
+     * 查询出审核通过了的数据
+     * @param pageno
+     * @param pagesize
+     * @param designProcedure
+     * @return
+     */
+    @RequestMapping("queryProcesstoexmainOk")
+    public IPage<DesignProcedure> queryProcesstoexmainOk(@RequestParam(value = "pageno",defaultValue ="1") Integer pageno,
+                                                         @RequestParam(value = "pagesize",defaultValue ="5")Integer pagesize,
+                                                         DesignProcedure designProcedure){
+        return procedureService.queryProcesstoexmainOk(pageno,pagesize,designProcedure);
+    }
+
+    /**
+     * 这是更改物料提交的方法
+     * @param moduleDetails
+     * @return
+     */
+    @RequestMapping("insnewpressdespro")
+    public boolean delpressdespro(@RequestBody List<ModuleDetails> moduleDetails){
+        return procedureService.insnewpressdespro(moduleDetails);
+    }
+
+    //工序物料更改
+    @RequestMapping("updprocessdespro")
+    public boolean updprocessdespro(Integer id){
+        System.out.println(id);
+        return procedureService.updprocessdespro(id);
     }
 }

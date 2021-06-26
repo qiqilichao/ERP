@@ -23,7 +23,6 @@ ModuleDetailsService moduleDetailsService;
             moduleDetails1.setParentId(moduleDetails1.getMdid());
             moduleDetails1.setDetailsNumber(moduleDetails1.getId());
             moduleDetailsService.save(moduleDetails1);
-
         }
         return true;
     }

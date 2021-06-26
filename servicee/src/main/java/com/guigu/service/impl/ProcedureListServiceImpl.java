@@ -33,7 +33,7 @@ public class ProcedureListServiceImpl extends ServiceImpl<ProcedureListMapper, P
         QueryWrapper<DesignProcedureModule> wrapper = new QueryWrapper<DesignProcedureModule>();
         wrapper.eq("PRODUCT_ID", id);
         List<DesignProcedureModule> list = designProcedureModuleService.list(wrapper);
-        if (list.size()>0) {
+        if (list.size()==0) {
             designProcedureMapper.upddestag(id);
             return designProcedureDetailsService.removeById(proid);
         }

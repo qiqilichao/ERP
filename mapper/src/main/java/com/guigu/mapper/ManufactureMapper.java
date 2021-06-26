@@ -11,4 +11,7 @@ public interface ManufactureMapper extends BaseMapper<Manufacture> {
             "WHERE ID=#{id}")
     int  updateTeg(Manufacture manufacture);
 
+    @Update("UPDATE `m_manufacture` SET MANUFACTURE_PROCEDURE_TAG='S002-1' WHERE id=#{id}")
+    boolean updmaprotag(Integer id);
+
 }

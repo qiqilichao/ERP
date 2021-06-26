@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.guigu.dto.ModuleDetailDto;
 import com.guigu.dto.ModuleDto;
 import lombok.Data;
@@ -12,7 +13,7 @@ import lombok.Data;
 
 @Data
 @TableName("d_module_details")
-public class ModuleDetails  extends ModuleDetailDto {
+public class ModuleDetails  extends ModuleDetailDto{
     @TableId(type = IdType.AUTO)
     private Integer id;
 
@@ -46,4 +47,8 @@ public class ModuleDetails  extends ModuleDetailDto {
 
     @TableField(exist = false)
     public Float subtotal1;
+
+    @TableField(exist = false)
+    public String register;
+
 }

@@ -17,31 +17,31 @@
     </bean>
 
     <!-- 2.配置事务通知-->
-    <tx:advice id="targetAdvice" transaction-manager="transactionManager">
-        <tx:attributes>
-            <tx:method name="add*" isolation="DEFAULT" propagation="REQUIRED" read-only="false"/>
+<!--    <tx:advice id="targetAdvice" transaction-manager="transactionManager">-->
+<!--        <tx:attributes>-->
+<!--            <tx:method name="add*" isolation="DEFAULT" propagation="REQUIRED" read-only="false"/>-->
 
-            <tx:method name="update*" isolation="DEFAULT" propagation="REQUIRED" read-only="false"/>
+<!--            <tx:method name="update*" isolation="DEFAULT" propagation="REQUIRED" read-only="false"/>-->
 
-            <tx:method name="query*" read-only="true"/>
-            <tx:method name="select*" read-only="true"/>
-        </tx:attributes>
-    </tx:advice>
+<!--            <tx:method name="query*" read-only="true"/>-->
+<!--            <tx:method name="select*" read-only="true"/>-->
+<!--        </tx:attributes>-->
+<!--    </tx:advice>-->
 
     <!-- 3.配置事务的切入点-->
-    <aop:config>
-        <aop:pointcut expression="within(com.guigu.service.impl.*)" id="targetPoint"/>
-        <aop:advisor advice-ref="targetAdvice" pointcut-ref="targetPoint"/>
-    </aop:config>
+<!--    <aop:config>-->
+<!--        <aop:pointcut expression="within(com.guigu.service.impl.*)" id="targetPoint"/>-->
+<!--        <aop:advisor advice-ref="targetAdvice" pointcut-ref="targetPoint"/>-->
+<!--    </aop:config>-->
 
 
-   <!-- <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource"></property>
-    </bean>-->
+<!--    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
+<!--        <property name="dataSource" ref="dataSource"></property>-->
+<!--    </bean>-->
 
     <!--开启事务注解-->
 
-   <!-- <tx:annotation-driven transaction-manager="transactionManager"></tx:annotation-driven>-->
+    <tx:annotation-driven transaction-manager="transactionManager"></tx:annotation-driven>
 
 
     <jdbc:embedded-database id="dataSource"/>
