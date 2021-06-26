@@ -5,6 +5,7 @@ import com.guigu.pojo.GatherDetails;
 import com.guigu.service.GatherDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,8 +28,16 @@ public class GatherDetailController {
         QueryWrapper<GatherDetails> gatherDetailsQueryWrapper = new QueryWrapper<>();
         gatherDetailsQueryWrapper.eq("PARENT_ID",id);
         List<GatherDetails> list = gatherDetailService.list(gatherDetailsQueryWrapper);
-
         return list;
+    }
+    @RequestMapping("/querylianjiaBy.action")
+    public GatherDetails querylianjiaBy(int id){
+        GatherDetails byId = gatherDetailService.getById(id);
+        return byId;
+    }
+    @RequestMapping("/rukubiaojiUpdate.action")
+    public boolean rukubiaojiUpdate(){
+return true;
     }
 
 }
