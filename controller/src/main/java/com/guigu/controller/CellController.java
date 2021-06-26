@@ -33,7 +33,7 @@ public class CellController {
     }
     @RequestMapping("/cellprodu.action")
     public String cellprodu(){
-        System.out.println(324567890);
+        //System.out.println(324567890);
         return " ";
     }
     @RequestMapping("/dqcunchuUpdateById.action")

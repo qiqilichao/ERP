@@ -61,6 +61,7 @@ public class ManufactureServiceImpl extends ServiceImpl<ManufactureMapper,Manufa
 
     @Override
     @Transient
+    //添加生产总表
     public boolean addManufacture(Manufacture manufacture) {
 
         //提交生产总表前修改生产计划派工标志
@@ -258,6 +259,10 @@ public class ManufactureServiceImpl extends ServiceImpl<ManufactureMapper,Manufa
         }
         return this.page(new Page<Manufacture>(pageno,pagesize),wrapper);
     }
+
+
+
+
 
     @Override
     public List<Procedure> queryManuById(Integer id) {
