@@ -32,8 +32,6 @@ public class ApplyController {
                                   @RequestParam(defaultValue = "5")int pagesize,
                                   Dfile dfile){
 
-
-
          return applyService.pageDfile(pageno,pagesize,dfile);
     }
 

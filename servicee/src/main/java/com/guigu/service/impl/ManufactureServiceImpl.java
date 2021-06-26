@@ -59,11 +59,16 @@ public class ManufactureServiceImpl extends ServiceImpl<ManufactureMapper,Manufa
     public boolean addManufacture(Manufacture manufacture) {
 
         //提交生产总表前修改生产计划派工标志
-        List<Apply> applies = applyService.queryByproductIdList(manufacture.getProductId());
-        for (Apply a : applies) {
-              a.setManufactureTag("P001-1");
-        }
-        boolean b = applyService.updateBatchById(applies);
+
+        String[] split = manufacture.getApplyIdGroup().split("-");
+        List<Apply> applies =new ArrayList<>();
+       for(int i=0;i<split.length;i++){
+           Apply apply = applyService.queryByproductIdList(split[i]);
+                 apply.setManufactureTag("P001-1");
+                 applies.add(apply);
+       }
+       boolean updateApply =  applyService.updateBatchById(applies);
+
 
 
         //组装生产总表
@@ -85,24 +90,36 @@ public class ManufactureServiceImpl extends ServiceImpl<ManufactureMapper,Manufa
 
         //添加生产工序物料
         List<DesignProcedureDetails> details = designProcedureDetailsService.listBypid(manufacture.getProductId());
-
         int bool=0;
         List<ProcedureModule> modules=new ArrayList<ProcedureModule>();
         List<Procedure> procedureArrayList = new ArrayList<Procedure>();
         for (DesignProcedureDetails d: details){
             Procedure procedure = new Procedure();
+
             procedure.setParentId(manufacture.getId());
+
             procedure.setDetailsNumber(d.getDetailsNumber());
-            procedure.setProcedureId(d.getProcedureId());
+
+            procedure.setProcedureId  (d.getProcedureId());
+
             procedure.setProcedureName(d.getProcedureName());
+
             procedure.setLabourHourAmount(d.getLabourHourAmount());
+
             procedure.setRealLabourHourAmount(0);
+
             procedure.setSubtotal(d.getSubtotal());
+
             procedure.setRealSubtotal(0);
+
             procedure.setModuleSubtotal(d.getModuleSubtotal());
+
             procedure.setRealModuleSubtotal(0);
+
             procedure.setCostPrice(d.getCostPrice());
+
             procedure.setDemandAmount (manufacture.getAmount());
+
             procedure.setRealAmount(0);
             procedure.setProcedureFinishTag("G004-0");
             procedure.setProcedureTransferTag("G005-0");
@@ -119,11 +136,11 @@ public class ManufactureServiceImpl extends ServiceImpl<ManufactureMapper,Manufa
                 ProcedureModule procedureModule= new ProcedureModule();
                 procedureModule.setParentId(procedure.getId());
                 procedureModule.setDetailsNumber(dm.getDetailsNumber());
-                procedureModule.setProductId(manufacture.getProductId());
-                procedureModule.setProductName(manufacture.getProductName());
+                procedureModule.setProductId(dm.getProductId());
+                procedureModule.setProductName(dm.getProductName());
                 procedureModule.setCostPrice(dm.getCostPrice());
-                procedureModule.setAmount(dm.getAmount());
-                procedureModule.setRealAmount(dm.getAmount()*manufacture.getAmount());
+                procedureModule.setAmount(dm.getAmount()*manufacture.getAmount());
+                procedureModule.setRealAmount(0);
                 procedureModule.setRenewAmount(0);
                 procedureModule.setSubtotal(dm.getSubtotal());
                 procedureModule.setRealSubtotal(0);
@@ -131,8 +148,7 @@ public class ManufactureServiceImpl extends ServiceImpl<ManufactureMapper,Manufa
             }
         }
         boolean saveBatch = procedureModuleService.saveBatch(modules);
-
-        if(save&&bool==details.size()&&saveBatch&&b)
+        if(save&&bool==details.size()&&saveBatch&&updateApply)
             return true;
         return false;
     }
@@ -178,7 +194,7 @@ public class ManufactureServiceImpl extends ServiceImpl<ManufactureMapper,Manufa
             }
             pay.setReason("C002-1");
             pay.setChecker(manufacture.getChecker());
-            pay.setReasonexact(manufacture.getManufactureId() + p.getProcedureName());
+            pay.setReasonexact(manufacture.getManufactureId()+"-"+p.getProcedureName());
             pay.setAmountSum(p.getDemandAmount());
             pay.setCostPriceSum(p.getModuleSubtotal());
             pay.setRegister(manufacture.getChecker());
@@ -199,8 +215,8 @@ public class ManufactureServiceImpl extends ServiceImpl<ManufactureMapper,Manufa
             for (ProcedureModule pm : list1) {
                 PayDetails payDetails = new PayDetails();
                 payDetails.setParentId(pay.getId());
-                payDetails.setProductId(manufacture.getProductId());
-                payDetails.setProductName(manufacture.getProductName());
+                payDetails.setProductId(pm.getProductId());
+                payDetails.setProductName(pm.getProductName());
                 payDetails.setProductDescribe(manufacture.getProductDescribe());
                 payDetails.setAmount(pm.getAmount());
                 payDetails.setCostPrice(pm.getCostPrice());

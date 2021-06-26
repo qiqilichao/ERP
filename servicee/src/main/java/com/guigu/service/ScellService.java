@@ -47,4 +47,6 @@ public interface ScellService extends IService<Scell> {
     boolean amendSCll(Scell scell);
 
     List<Scell> queryByIdSCell2(String productId);
+
+
 }

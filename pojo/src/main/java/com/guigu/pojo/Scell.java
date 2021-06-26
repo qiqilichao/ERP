@@ -71,15 +71,16 @@ public class Scell {
     @TableField("REGISTER_TIME")
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    private Data registerTime;/*登记时间*/
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date registerTime;/*登记时间*/
 
     @TableField("CHECKER")
     private String checker;/*复核人*/
 
     @TableField("CHECK_TIME")
-    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss",timezone = "Asia/Shanghai")
-    private Data checkTime;/*复核时间*/
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "Asia/Shanghai")
+    private Date checkTime;/*复核时间*/
 
     @TableField("CHECK_TAG")
     private String checkTag;/*审核标志*/
@@ -92,4 +93,16 @@ public class Scell {
 
     @TableField("THE_DESIGNER")
     private String theDesigner;/*设计人*/
+
+    @TableField(exist = false)
+    private String str;
+
+    @TableField(exist = false)
+    private Integer confirm;
+
+    @TableField(exist = false)
+    private String payid;
+
+    @TableField(exist = false)
+    private String mid;
 }

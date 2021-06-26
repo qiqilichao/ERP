@@ -5,12 +5,15 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.guigu.mapper.ScellMapper;
-import com.guigu.pojo.Dfile;
+import com.guigu.pojo.*;
+import com.guigu.service.ManufactureService;
+import com.guigu.service.PayDetailsService;
+import com.guigu.service.PayService;
 import com.guigu.service.ScellService;
-import com.guigu.pojo.Scell;
 import com.guigu.util.IdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,6 +21,15 @@ import java.util.List;
 public class ScellServiceImpl extends ServiceImpl<ScellMapper,Scell> implements ScellService{
     @Autowired
     private ScellMapper scellMapper;
+
+    @Autowired
+    private ManufactureService manufactureService;
+
+    @Autowired
+    private PayService payService;
+
+    @Autowired
+    private PayDetailsService payDetailsService;
 
     /**
      * 添加
@@ -90,6 +102,8 @@ public class ScellServiceImpl extends ServiceImpl<ScellMapper,Scell> implements 
         queryWrapper.eq("PRODUCT_ID",productId);
         return  this.list(queryWrapper);
     }
+
+
     /**
      * 制作安全库存配置单-复核
      * @param id,CheckTag

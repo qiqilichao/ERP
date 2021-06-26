@@ -41,9 +41,10 @@ public class ApplyServiceImpl extends ServiceImpl<ApplyMapper,Apply> implements 
         QueryWrapper<Dfile> wrapper =new QueryWrapper();
         wrapper.eq("TYPE","Y001-1");
         wrapper.eq("CHECK_TAG","S001-1");
-       /* wrapper.eq("DESIGN_MODULE_TAG","W001-1");
+        wrapper.eq("DESIGN_MODULE_TAG","W001-1");
         wrapper.eq("DESIGN_PROCEDURE_TAG","G001-1");
-        wrapper.eq("DESIGN_CELL_TAG","K001-1");*/
+        wrapper.eq("DELETE_TAG","C001-0");
+        wrapper.eq("DESIGN_CELL_TAG","K001-1");
        if(!StringUtils.isEmpty(dfile.getProductName())){
            wrapper.like("PRODUCT_NAME",dfile.getProductName());
        }
@@ -99,11 +100,12 @@ public class ApplyServiceImpl extends ServiceImpl<ApplyMapper,Apply> implements 
 
     //生根据提交的产品id查询生产设计表
     @Override
-    public List<Apply> queryByproductIdList(String pid) {
+    public Apply queryByproductIdList(String pid) {
+
         QueryWrapper<Apply> wrapper = new QueryWrapper<>();
-        wrapper.eq("PRODUCT_ID",pid);
+        wrapper.eq("APPLY_ID",pid);
         wrapper.eq("CHECK_TAG","S001-1");
-        return this.list(wrapper);
+        return this.getOne(wrapper);
     }
 
 
