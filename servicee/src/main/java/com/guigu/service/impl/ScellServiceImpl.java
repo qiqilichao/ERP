@@ -1,6 +1,9 @@
 package com.guigu.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -101,6 +104,26 @@ public class ScellServiceImpl extends ServiceImpl<ScellMapper,Scell> implements 
         QueryWrapper<Scell> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("PRODUCT_ID",productId);
         return  this.list(queryWrapper);
+    }
+
+    /**
+     * 分页动态库存查询
+     * @param pageno
+     * @param pagesize
+     * @param scell
+     * @return
+     */
+    @Override
+    public IPage<Scell> pageScell(int pageno,int pagesize,Scell scell) {
+
+        QueryWrapper<Scell> wrapper = new QueryWrapper<>();
+        if(!StringUtils.isEmpty(scell.getProductName())){
+            wrapper.like("PRODUCT_NAME",scell.getProductName());
+        }
+        if(!StringUtils.isEmpty(scell.getProductId())){
+            wrapper.eq("PRODUCT_ID",scell.getProductId());
+        }
+        return this.page(new Page<Scell>(pageno,pagesize),wrapper);
     }
 
 

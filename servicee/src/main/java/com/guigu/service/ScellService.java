@@ -1,5 +1,6 @@
 package com.guigu.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.pagehelper.PageInfo;
 import com.guigu.pojo.Dfile;
@@ -49,4 +50,8 @@ public interface ScellService extends IService<Scell> {
     List<Scell> queryByIdSCell2(String productId);
 
 
+    /**
+     * 动态库存查询
+     */
+     IPage<Scell> pageScell(int pageno,int pagesize,Scell scell);
 }

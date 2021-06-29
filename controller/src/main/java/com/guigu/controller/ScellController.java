@@ -1,5 +1,6 @@
 package com.guigu.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.pagehelper.PageInfo;
 import com.guigu.pojo.Dfile;
 import com.guigu.pojo.Scell;
@@ -110,6 +111,19 @@ public class ScellController {
     public boolean amendSCll(Scell scell){
         return scellService.amendSCll(scell);
     }
+
+
+    /**
+     * 分页动态库存查询
+     */
+    @RequestMapping("/pageScell")
+    public IPage<Scell> pageScell(@RequestParam(defaultValue = "1") int pageno,
+                                  @RequestParam(defaultValue = "10") int pagesize,
+                                  Scell scell){
+        System.out.println(scell);
+        return scellService.pageScell(pageno,pagesize,scell);
+    }
+
 
 
 
